@@ -1,7 +1,10 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import reduxThunk from "redux-thunk";
+import { locationReducer } from "./reducers/locationReducer";
 
-const rootReducer = combineReducers({});
+const rootReducer = combineReducers({
+  locationReducer,
+});
 
 const middleWare = applyMiddleware(reduxThunk);
 

@@ -5,14 +5,13 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 // pages
 import HomePage from "./pages/HomePage";
+import HomeTemplate from "./templates/HomeTemplate";
 
 function App() {
   return (
     <BrowserRouter>
-      {/* <Component cố định /> */}
       <Switch>
-        <Route exact path={"/home"} component={HomePage} />
-        <Route exact path={"/"} component={HomePage} />
+        <HomeTemplate path="/" component={HomePage} />
       </Switch>
     </BrowserRouter>
   );

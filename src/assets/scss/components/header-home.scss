@@ -1,0 +1,42 @@
+@import "../base/base.scss";
+
+$navbar-height: 70px;
+$navbar-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+$navbar-padding: 20px 0;
+
+.header-home {
+  width: 100%;
+  height: $navbar-height;
+  background-color: $white-color;
+  box-shadow: $navbar-shadow;
+
+  .container {
+    width: 100%;
+    max-width: $container-width;
+    margin: $container-margin;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .logo {
+      height: $navbar-height;
+      padding: $navbar-padding;
+
+      img {
+        height: 100%;
+      }
+    }
+
+    .account {
+      height: $navbar-height;
+      padding: $navbar-padding;
+      cursor: pointer;
+
+      img {
+        height: 100%;
+      }
+    }
+  }
+}

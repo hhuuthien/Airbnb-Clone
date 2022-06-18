@@ -15,7 +15,7 @@ http.interceptors.request.use(
   (config) => {
     config.headers = {
       ...config.headers,
-      ["TokenCybersoft"]: TOKEN_CYBERSOFT,
+      ["tokenByClass"]: TOKEN_CYBERSOFT,
       ["Authorization"]: "Bearer " + localStorage.getItem(ACCESS_TOKEN),
     };
     return config;
