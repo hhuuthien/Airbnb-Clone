@@ -1,1 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Source Sans Pro", sans-serif;
+}
+
 @import "./components/header-home.scss";
+@import "./components/location.scss";
+@import "./pages/home-page.scss";

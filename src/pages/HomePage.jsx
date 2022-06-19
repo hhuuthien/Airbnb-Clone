@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Location from "../components/Location";
 import { getLocationAPI } from "../redux/actions/locationAction";
 
 export default function HomePage() {
@@ -13,8 +14,9 @@ export default function HomePage() {
   };
 
   const renderLocationList = (locationList) => {
-    return locationList.map((loc, index) => {
-      return <div key={index}>{loc.name}</div>;
+    const list = locationList.slice(0, 20);
+    return list.map((location, index) => {
+      return <Location key={index} location={location} />;
     });
   };
 
@@ -22,5 +24,11 @@ export default function HomePage() {
     getLocationList();
   }, []);
 
-  return <div className="app">{renderLocationList(locationList)}</div>;
+  return (
+    <div className="home-page">
+      <div className="container">
+        <div className="location-list">{renderLocationList(locationList)}</div>
+      </div>
+    </div>
+  );
 }
