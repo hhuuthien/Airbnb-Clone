@@ -9,11 +9,15 @@ $navbar-padding: 20px 0;
   height: $navbar-height;
   background-color: $bg-color;
   box-shadow: $navbar-shadow;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 
   .container {
     width: 100%;
     max-width: $container-width;
     margin: $container-margin;
+    padding: $container-padding;
 
     display: flex;
     flex-direction: row;

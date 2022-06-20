@@ -11,13 +11,14 @@ export default function Location({ location }) {
           <div className="name">{location.name}</div>
           <div className="star">
             {location.valueate}
-            <i className="fa-solid fa-star"></i>
+            <i className="fa-regular fa-star"></i>
           </div>
         </div>
         <div className="info-line2">
           {location.province}, {location.country}
         </div>
       </div>
+      <i className="fa-regular fa-heart"></i>
     </div>
   );
 }
