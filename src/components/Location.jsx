@@ -1,8 +1,9 @@
 import React from "react";
+import { motion } from "framer-motion";
 
-export default function Location({ location }) {
+export default function Location({ location, index }) {
   return (
-    <div className="location-card">
+    <motion.div className="location-card" initial={{ y: -100 }} animate={{ y: 0 }} transition={{ ease: "easeOut", duration: 0.25 * (index + 1) }}>
       <div className="image">
         <img src={location.image} alt={location.name} />
       </div>
@@ -19,6 +20,6 @@ export default function Location({ location }) {
         </div>
       </div>
       <i className="fa-regular fa-heart"></i>
-    </div>
+    </motion.div>
   );
 }

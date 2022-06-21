@@ -54,7 +54,7 @@ export default function HomePage() {
       <>
         <div className="location-list">
           {list.slice(startIndex, startIndex + DEFAULT_PAGE_SIZE).map((location, index) => {
-            return <Location key={index} location={location} />;
+            return <Location key={index} location={location} index={index} />;
           })}
         </div>
         <div className="pagination">
