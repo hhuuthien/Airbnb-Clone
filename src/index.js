@@ -5,6 +5,9 @@ import "./index.css";
 // setup antd
 import "antd/dist/antd.css";
 
+// setup animate css
+import "animate.css";
+
 // setup redux
 import { Provider } from "react-redux";
 import { store } from "./redux/configStore";

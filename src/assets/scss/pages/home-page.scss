@@ -35,5 +35,22 @@
     .search {
       padding-top: 30px;
     }
+
+    .no-result {
+      padding: 30px 0;
+      text-align: center;
+      animation: zoomIn;
+      animation-duration: 0.5s;
+
+      img {
+        width: 45px;
+      }
+
+      .nr1 {
+        margin-top: 20px;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+    }
   }
 }

@@ -22,11 +22,18 @@ export default function HomePage() {
   };
 
   const onSearch = (value) => {
-    const listSearch = locationListCopy.filter((location) => location.name && location.name.includes(value));
+    let listSearch = [];
+    if (value === "") {
+      listSearch = [...locationListCopy];
+    } else {
+      listSearch = locationListCopy.filter((location) => location.name && location.name.includes(value));
+    }
     dispatch({
       type: UPDATE_ARRAY_BY_SEARCHING,
       data: listSearch,
     });
+    setCurrent(1);
+    setStartIndex(0);
   };
 
   const getLocationList = () => {
@@ -34,9 +41,27 @@ export default function HomePage() {
   };
 
   const renderLocationList = (list) => {
-    return list.slice(startIndex, startIndex + DEFAULT_PAGE_SIZE).map((location, index) => {
-      return <Location key={index} location={location} />;
-    });
+    if (list.length === 0) {
+      return (
+        <div className="no-result">
+          <img src="/img/not-found.png" alt="Không tìm thấy kết quả nào" />
+          <p className="nr1">Không tìm thấy kết quả nào</p>
+          <div className="nr2">Hãy thử với từ khoá khác</div>
+        </div>
+      );
+    }
+    return (
+      <>
+        <div className="location-list">
+          {list.slice(startIndex, startIndex + DEFAULT_PAGE_SIZE).map((location, index) => {
+            return <Location key={index} location={location} />;
+          })}
+        </div>
+        <div className="pagination">
+          <Pagination current={current} onChange={onPaginationChange} total={locationList.length} showSizeChanger={false} defaultPageSize={DEFAULT_PAGE_SIZE} />
+        </div>
+      </>
+    );
   };
 
   useEffect(() => {
@@ -49,10 +74,7 @@ export default function HomePage() {
         <div className="search">
           <Search placeholder="Tìm kiếm vị trí..." allowClear enterButton="Tìm kiếm" size="middle" onSearch={onSearch} />
         </div>
-        <div className="location-list">{renderLocationList(locationList)}</div>
-        <div className="pagination">
-          <Pagination current={current} onChange={onPaginationChange} total={locationList.length} showSizeChanger={false} defaultPageSize={DEFAULT_PAGE_SIZE} />
-        </div>
+        {renderLocationList(locationList)}
       </div>
     </div>
   );
