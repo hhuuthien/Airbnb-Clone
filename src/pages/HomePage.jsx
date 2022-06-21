@@ -4,12 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Location from "../components/Location";
 import { getLocationAPI } from "../redux/actions/locationAction";
 import { UPDATE_ARRAY_BY_SEARCHING } from "../redux/const/constant";
+import { motion } from "framer-motion";
 const { Search } = Input;
 
 export default function HomePage() {
   const { locationList, locationListCopy } = useSelector((state) => state.locationReducer);
-  // locationList là mảng dữ liệu để render, mảng này có thể bị ảnh hưởng bởi tìm kiếm hoặc lọc
-  // locationListCopy là mảng dữ liệu gốc
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(1);
   const [startIndex, setStartIndex] = useState(0);
@@ -43,11 +42,11 @@ export default function HomePage() {
   const renderLocationList = (list) => {
     if (list.length === 0) {
       return (
-        <div className="no-result">
+        <motion.div className="no-result" initial={{ x: -200 }} animate={{ x: 0 }}>
           <img src="/img/not-found.png" alt="Không tìm thấy kết quả nào" />
           <p className="nr1">Không tìm thấy kết quả nào</p>
           <div className="nr2">Hãy thử với từ khoá khác</div>
-        </div>
+        </motion.div>
       );
     }
     return (

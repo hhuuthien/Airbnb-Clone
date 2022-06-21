@@ -1,11 +1,11 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function Location({ location, index }) {
   return (
-    <motion.div className="location-card" initial={{ y: -100 }} animate={{ y: 0 }} transition={{ ease: "easeOut", duration: 0.25 * (index + 1) }}>
+    <div className="location-card">
       <div className="image">
-        <img src={location.image} alt={location.name} />
+        <LazyLoadImage alt={location.name} src={location.image} />
       </div>
       <div className="info">
         <div className="info-line1">
@@ -20,6 +20,6 @@ export default function Location({ location, index }) {
         </div>
       </div>
       <i className="fa-regular fa-heart"></i>
-    </motion.div>
+    </div>
   );
 }
