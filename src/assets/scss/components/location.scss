@@ -44,6 +44,10 @@
       .star {
         color: $primary-color;
         font-weight: bold;
+        width: 40px;
+        min-width: 40px;
+        text-align: right;
+        margin-left: 15px;
 
         .fa-star {
           margin-left: 4px;
