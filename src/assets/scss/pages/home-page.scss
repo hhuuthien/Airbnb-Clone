@@ -34,6 +34,15 @@
 
     .search {
       padding-top: 30px;
+      display: flex;
+
+      button.btn-filter {
+        margin-left: 10px;
+
+        i {
+          margin-right: 8px;
+        }
+      }
     }
 
     .no-result {
@@ -50,5 +59,15 @@
         font-weight: bold;
       }
     }
+  }
+}
+
+.ant-drawer-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .cb {
+    margin-bottom: 12px;
   }
 }

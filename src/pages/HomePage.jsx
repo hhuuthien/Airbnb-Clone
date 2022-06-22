@@ -1,10 +1,10 @@
-import { Input, Pagination } from "antd";
+import { Button, Input, Pagination, Drawer, Checkbox } from "antd";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Location from "../components/Location";
 import { getLocationAPI } from "../redux/actions/locationAction";
-import { UPDATE_ARRAY_BY_SEARCHING } from "../redux/const/constant";
-import { motion } from "framer-motion";
+import { UPDATE_ARRAY_BY_SEARCHING, UPDATE_ARRAY_BY_FILTERING } from "../redux/const/constant";
 const { Search } = Input;
 
 export default function HomePage() {
@@ -12,7 +12,64 @@ export default function HomePage() {
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(1);
   const [startIndex, setStartIndex] = useState(0);
+  const [check1, setCheck1] = useState(false);
+  const [check2, setCheck2] = useState(false);
+  const [check3, setCheck3] = useState(false);
+  const [check4, setCheck4] = useState(false);
   const DEFAULT_PAGE_SIZE = 20;
+
+  const [visibleDrawer, setVisibleDrawer] = useState(false);
+  const showDrawer = () => {
+    setVisibleDrawer(true);
+  };
+  const onClose = () => {
+    setVisibleDrawer(false);
+  };
+
+  const onCheckBoxChange = (e) => {
+    switch (e.target.id) {
+      case "cb1":
+        setCheck1(e.target.checked);
+        break;
+      case "cb2":
+        setCheck2(e.target.checked);
+        break;
+      case "cb3":
+        setCheck3(e.target.checked);
+        break;
+      case "cb4":
+        setCheck4(e.target.checked);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const submitFilter = () => {
+    setVisibleDrawer(false);
+    let listFilter1 = [];
+    let listFilter2 = [];
+    let listFilter3 = [];
+    let listFilter4 = [];
+    if (check1) {
+      listFilter1 = locationListCopy.filter((location) => location.valueate && location.valueate === 10);
+    }
+    if (check2) {
+      listFilter2 = locationListCopy.filter((location) => location.valueate && (location.valueate === 9 || location.valueate === 8));
+    }
+    if (check3) {
+      listFilter3 = locationListCopy.filter((location) => location.valueate && (location.valueate === 7 || location.valueate === 6));
+    }
+    if (check4) {
+      listFilter4 = locationListCopy.filter((location) => location.valueate && location.valueate <= 5);
+    }
+    dispatch({
+      type: UPDATE_ARRAY_BY_FILTERING,
+      data: [...listFilter1, ...listFilter2, ...listFilter3, ...listFilter4],
+    });
+    setCurrent(1);
+    setStartIndex(0);
+  };
 
   const onPaginationChange = (page) => {
     setCurrent(page);
@@ -72,6 +129,36 @@ export default function HomePage() {
       <div className="container">
         <div className="search">
           <Search placeholder="Tìm kiếm vị trí..." allowClear enterButton="Tìm kiếm" size="middle" onSearch={onSearch} />
+          <Button type="primary" onClick={showDrawer} className="btn-filter">
+            <i className="fa-solid fa-sliders"></i> Bộ lọc
+          </Button>
+          <Drawer title="Bộ lọc kết quả" placement="right" onClose={onClose} visible={visibleDrawer}>
+            <div className="cb-area">
+              <div className="cb">
+                <Checkbox id="cb1" onChange={onCheckBoxChange}>
+                  <i className="fa-regular fa-star"></i> 10
+                </Checkbox>
+              </div>
+              <div className="cb">
+                <Checkbox id="cb2" onChange={onCheckBoxChange}>
+                  <i className="fa-regular fa-star"></i> 8 - 9
+                </Checkbox>
+              </div>
+              <div className="cb">
+                <Checkbox id="cb3" onChange={onCheckBoxChange}>
+                  <i className="fa-regular fa-star"></i> 6 - 7
+                </Checkbox>
+              </div>
+              <div className="cb">
+                <Checkbox id="cb4" onChange={onCheckBoxChange}>
+                  <i className="fa-regular fa-star"></i> 5 và thấp hơn
+                </Checkbox>
+              </div>
+            </div>
+            <Button type="primary" className="btn-filter-submit" onClick={submitFilter}>
+              Lọc kết quả
+            </Button>
+          </Drawer>
         </div>
         {renderLocationList(locationList)}
       </div>

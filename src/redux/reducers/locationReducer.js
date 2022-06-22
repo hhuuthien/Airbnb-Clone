@@ -1,4 +1,4 @@
-import { GET_LOCATION_FROM_API, UPDATE_ARRAY_BY_SEARCHING } from "../const/constant";
+import { GET_LOCATION_FROM_API, UPDATE_ARRAY_BY_SEARCHING, UPDATE_ARRAY_BY_FILTERING } from "../const/constant";
 
 const defaultState = {
   locationList: [],
@@ -15,6 +15,12 @@ export const locationReducer = (state = defaultState, action) => {
       };
     }
     case UPDATE_ARRAY_BY_SEARCHING: {
+      return {
+        ...state,
+        locationList: action.data,
+      };
+    }
+    case UPDATE_ARRAY_BY_FILTERING: {
       return {
         ...state,
         locationList: action.data,
