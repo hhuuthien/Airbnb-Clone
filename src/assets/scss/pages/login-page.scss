@@ -40,5 +40,15 @@
     .password {
       margin-top: 18px;
     }
+
+    .error {
+      display: inline-block;
+      background-color: $error-color;
+      color: $bg-color;
+      margin-top: 4px;
+      font-size: 12px;
+      border-radius: 5px;
+      padding: 2px 8px;
+    }
   }
 }
