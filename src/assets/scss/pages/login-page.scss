@@ -1,1 +1,44 @@
 @import "../base/base.scss";
+@import "../components/header-home.scss";
+
+.login-page {
+  width: 100%;
+  height: calc(100vh - #{$navbar-height});
+  background-image: url("https://images.unsplash.com/uploads/1412026095116d2b0c90e/3bf33993");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+
+  .overlay {
+    width: 100%;
+    height: calc(100vh - #{$navbar-height});
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+  }
+
+  .container {
+    width: 100%;
+    max-width: $container-width-small;
+    margin: $container-margin;
+    padding: $container-padding;
+  }
+
+  .login-form {
+    padding: 30px 0;
+
+    h2 {
+      font-weight: bold;
+      text-align: center;
+      color: $primary-color;
+    }
+
+    .btn-login {
+      width: 100%;
+      margin-top: 18px;
+    }
+
+    .email,
+    .password {
+      margin-top: 18px;
+    }
+  }
+}
