@@ -1,6 +1,10 @@
 import React from "react";
 
-export default function HeaderHome() {
+export default function HeaderHome(props) {
+  const goToLoginPage = () => {
+    props.history.push("/login");
+  };
+
   return (
     <div className="header-home">
       <div className="container">
@@ -10,7 +14,7 @@ export default function HeaderHome() {
           </a>
         </div>
         <div className="search"></div>
-        <div className="account">
+        <div className="account" onClick={goToLoginPage}>
           <img src="/img/user-blank.png" alt="User image" />
         </div>
       </div>

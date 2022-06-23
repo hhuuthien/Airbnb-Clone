@@ -1,17 +1,19 @@
 import "./App.css";
 
 // setup router
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Switch } from "react-router-dom";
 
 // pages
 import HomePage from "./pages/HomePage";
-import HomeTemplate from "./templates/HomeTemplate";
+import LoginPage from "./pages/LoginPage";
+import HeaderTemplate from "./templates/HeaderTemplate";
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <HomeTemplate path="/" component={HomePage} />
+        <HeaderTemplate path="/login" component={LoginPage} />
+        <HeaderTemplate path="/" component={HomePage} />
       </Switch>
     </BrowserRouter>
   );

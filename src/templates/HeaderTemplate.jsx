@@ -6,11 +6,11 @@ export default function HomeTemplate(props) {
     <Route
       exact
       path={props.path}
-      render={() => {
+      render={(propsRoute) => {
         return (
           <>
-            <HeaderHome />
-            <props.component />
+            <HeaderHome {...propsRoute} />
+            <props.component {...propsRoute} />
           </>
         );
       }}

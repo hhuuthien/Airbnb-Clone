@@ -103,6 +103,7 @@ export default function HomePage() {
     setCurrent(1);
     setStartIndex(0);
   };
+
   const onPaginationChange = (page) => {
     setCurrent(page);
     setStartIndex((page - 1) * DEFAULT_PAGE_SIZE);
