@@ -6,6 +6,7 @@ import { BrowserRouter, Switch } from "react-router-dom";
 // pages
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 import AccountPage from "./pages/AccountPage";
 import HeaderTemplate from "./templates/HeaderTemplate";
 
@@ -14,6 +15,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         <HeaderTemplate path="/login" component={LoginPage} />
+        <HeaderTemplate path="/signup" component={SignupPage} />
         <HeaderTemplate path="/account" component={AccountPage} />
         <HeaderTemplate path="/" component={HomePage} />
       </Switch>

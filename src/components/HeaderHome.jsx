@@ -33,6 +33,10 @@ export default function HeaderHome(props) {
     props.history.push("/login");
   };
 
+  const goToSignupPage = () => {
+    props.history.push("/signup");
+  };
+
   const signOut = () => {
     // xoá localStorage
     localStorage.removeItem(USER_LOGIN);
@@ -63,7 +67,7 @@ export default function HeaderHome(props) {
           label: <div onClick={goToLoginPage}>Đăng nhập</div>,
         },
         {
-          label: <div>Đăng kí tài khoản</div>,
+          label: <div onClick={goToSignupPage}>Đăng kí tài khoản</div>,
         },
       ]}
     />

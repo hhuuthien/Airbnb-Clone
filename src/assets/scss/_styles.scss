@@ -5,8 +5,15 @@
   font-family: "Source Sans Pro", sans-serif;
 }
 
+@import "./base/base.scss";
+
+.ant-modal-confirm-confirm .ant-modal-confirm-body > .anticon {
+  color: $primary-color;
+}
+
 @import "./components/header-home.scss";
 @import "./components/location.scss";
 @import "./pages/home-page.scss";
 @import "./pages/login-page.scss";
+@import "./pages/signup-page.scss";
 @import "./pages/account-page.scss";
