@@ -1,4 +1,4 @@
-import { Button, Input } from "antd";
+import { Button, Input, Alert } from "antd";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -7,7 +7,7 @@ import { loginAPI } from "../redux/actions/loginAction";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 export default function LoginPage(props) {
-  const { user, isLoggingIn } = useSelector((state) => state.userReducer);
+  const { user, loginStatus } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -16,8 +16,8 @@ export default function LoginPage(props) {
       password: "",
     },
     validationSchema: YUB.object({
-      email: YUB.string().required("Không được để trống"),
-      password: YUB.string().required("Không được để trống"),
+      email: YUB.string().required("Không được để trống ô này"),
+      password: YUB.string().required("Không được để trống ô này"),
     }),
     validateOnBlur: false,
     validateOnChange: false,
@@ -43,36 +43,25 @@ export default function LoginPage(props) {
             <div className="email">
               <label>Email</label>
               <Input className="input-email" value={formik.values.email} onChange={formik.handleChange} name="email" allowClear />
-              {formik.errors.email ? (
-                <p className="error">
-                  <i className="fa-solid fa-circle-exclamation"></i>
-                  {formik.errors.email}
-                </p>
-              ) : (
-                <></>
-              )}
+              {formik.errors.email ? <Alert style={{ marginTop: 4 }} message={formik.errors.email} type="error" showIcon /> : null}
             </div>
             <div className="password">
               <label>Mật khẩu</label>
               <Input.Password className="input-password" value={formik.values.password} onChange={formik.handleChange} name="password" />
-              {formik.errors.password ? (
-                <p className="error">
-                  <i className="fa-solid fa-circle-exclamation"></i>
-                  {formik.errors.password}
-                </p>
-              ) : (
-                <></>
-              )}
+              {formik.errors.password ? <Alert style={{ marginTop: 4 }} message={formik.errors.password} type="error" showIcon /> : null}
             </div>
-            {isLoggingIn ? (
+            {loginStatus === "start" ? (
               <Button type="primary" className="btn-login" loading>
-                Đăng nhập
+                Đang đăng nhập
               </Button>
             ) : (
               <Button type="primary" className="btn-login" onClick={formik.handleSubmit}>
                 Đăng nhập
               </Button>
             )}
+            {loginStatus === "fail" ? (
+              <Alert style={{ marginTop: 10 }} message="Đã xảy ra lỗi" description="Vui lòng kiểm tra lại email và mật khẩu" type="error" showIcon closable />
+            ) : null}
           </div>
         </div>
       </div>
