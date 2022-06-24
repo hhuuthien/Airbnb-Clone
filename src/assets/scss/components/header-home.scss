@@ -30,6 +30,7 @@ $navbar-padding: 20px 0;
 
       img {
         height: 100%;
+        cursor: pointer;
       }
     }
 
@@ -38,8 +39,18 @@ $navbar-padding: 20px 0;
       padding: $navbar-padding;
       cursor: pointer;
 
-      img {
-        height: 100%;
+      .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 100px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+        }
       }
     }
   }
