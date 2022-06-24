@@ -1,25 +1,25 @@
-import { ACCESS_TOKEN, http } from "../../util/setting";
-import { LOGIN_SUCCESS, CHANGE_STATUS_LOGGING_IN } from "../const/constant";
+import { ACCESS_TOKEN, http, USER_LOGIN } from "../../util/setting";
+import { START_LOGIN, LOGIN_SUCCESS } from "../const/constant";
 
 export const loginAPI = (loginInfo) => {
   return async (dispatch) => {
     dispatch({
-      type: CHANGE_STATUS_LOGGING_IN,
-      data: true,
+      type: START_LOGIN,
     });
 
     let result = await http.post("/api/auth/login", loginInfo);
     if (result.status === 200) {
       // đăng nhập thành công
-      // save token to localStorage
       localStorage.setItem(ACCESS_TOKEN, result.data.token);
-      // save user data to redux
+      localStorage.setItem(USER_LOGIN, JSON.stringify(result.data.user));
       setTimeout(() => {
         dispatch({
           type: LOGIN_SUCCESS,
           data: result.data.user,
         });
-      }, 3000);
+      }, 2000);
+    } else {
+      console.log("Thất bại");
     }
   };
 };

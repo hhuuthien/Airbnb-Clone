@@ -1,8 +1,10 @@
 import { Button, Input } from "antd";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 import * as YUB from "yup";
 import { loginAPI } from "../redux/actions/loginAction";
+import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 export default function LoginPage(props) {
   const { user, isLoggingIn } = useSelector((state) => state.userReducer);
@@ -24,7 +26,13 @@ export default function LoginPage(props) {
     },
   });
 
-  // user.email && user.email === formik.values.email && setLoading(false);
+  // Mỗi lần render lại đều kiểm tra xem đăng nhập xong chưa
+  // Nếu đăng nhập xong (có ACCESS_TOKEN và USER_LOGIN trong localStorage, có thông tin user trong redux) thì quay lại trang account
+  // Nếu đăng nhập chưa xong thì ở lại đây tiếp tục
+
+  if (localStorage.getItem(USER_LOGIN) && localStorage.getItem(ACCESS_TOKEN) && user.email) {
+    return <Redirect to="/account" />;
+  }
 
   return (
     <div className="login-page">

@@ -1,8 +1,8 @@
 import React from "react";
 
 export default function HeaderHome(props) {
-  const goToLoginPage = () => {
-    props.history.push("/login");
+  const goToAccountPage = () => {
+    props.history.push("/account");
   };
 
   return (
@@ -14,7 +14,7 @@ export default function HeaderHome(props) {
           </a>
         </div>
         <div className="search"></div>
-        <div className="account" onClick={goToLoginPage}>
+        <div className="account" onClick={goToAccountPage}>
           <img src="/img/user-blank.png" alt="User image" />
         </div>
       </div>

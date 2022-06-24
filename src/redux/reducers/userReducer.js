@@ -1,7 +1,13 @@
-import { CHANGE_STATUS_LOGGING_IN, LOGIN_SUCCESS } from "../const/constant";
+import { ACCESS_TOKEN, USER_LOGIN } from "../../util/setting";
+import { START_LOGIN, LOGIN_SUCCESS } from "../const/constant";
+
+let userFromLocalStorage = {};
+if (localStorage.getItem(USER_LOGIN) && localStorage.getItem(ACCESS_TOKEN)) {
+  userFromLocalStorage = JSON.parse(localStorage.getItem(USER_LOGIN));
+}
 
 const defaultState = {
-  user: {},
+  user: userFromLocalStorage,
   isLoggingIn: false,
 };
 
@@ -14,10 +20,10 @@ export const userReducer = (state = defaultState, action) => {
         isLoggingIn: false,
       };
     }
-    case CHANGE_STATUS_LOGGING_IN: {
+    case START_LOGIN: {
       return {
         ...state,
-        isLoggingIn: action.data,
+        isLoggingIn: true,
       };
     }
     default: {
