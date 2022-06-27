@@ -1,14 +1,24 @@
 import { Alert, Button, Input } from "antd";
 import { useFormik } from "formik";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as YUB from "yup";
-import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 import { signupAPI } from "../redux/actions/signupAction";
+import { END_SIGNUP } from "../redux/const/constant";
+import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
-export default function SignupPage() {
+export default function SignupPage(props) {
   const { user, signupStatus } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: END_SIGNUP,
+      });
+    };
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -92,6 +102,20 @@ export default function SignupPage() {
             )}
             {signupStatus === "fail" ? (
               <Alert style={{ marginTop: 10 }} message="Đã xảy ra lỗi" description="Vui lòng kiểm tra lại thông tin hoặc thử lại sau" type="error" showIcon closable />
+            ) : null}
+            {signupStatus === "success" ? (
+              <Alert
+                style={{ marginTop: 10 }}
+                message="Đăng ký tài khoản thành công"
+                description="Bây giờ bạn có thể đăng nhập bằng tài khoản vừa tạo"
+                type="success"
+                showIcon
+                action={
+                  <Button size="medium" type="primary" onClick={() => props.history.replace("/login")}>
+                    Đăng nhập
+                  </Button>
+                }
+              />
             ) : null}
           </div>
         </div>

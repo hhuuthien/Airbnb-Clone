@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN, USER_LOGIN } from "../../util/setting";
-import { LOGIN_FAIL, LOGIN_SUCCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, SIGN_OUT, START_LOGIN, START_SIGNUP } from "../const/constant";
+import { END_LOGIN, END_SIGNUP, LOGIN_FAIL, LOGIN_SUCCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, SIGN_OUT, START_LOGIN, START_SIGNUP } from "../const/constant";
 
 let userFromLocalStorage = {};
 if (localStorage.getItem(USER_LOGIN) && localStorage.getItem(ACCESS_TOKEN)) {
@@ -55,6 +55,18 @@ export const userReducer = (state = defaultState, action) => {
       return {
         ...state,
         signupStatus: "fail",
+      };
+    }
+    case END_SIGNUP: {
+      return {
+        ...state,
+        signupStatus: "",
+      };
+    }
+    case END_LOGIN: {
+      return {
+        ...state,
+        loginStatus: "",
       };
     }
     default: {

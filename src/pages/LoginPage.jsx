@@ -1,14 +1,24 @@
-import { Button, Input, Alert } from "antd";
+import { Alert, Button, Input } from "antd";
 import { useFormik } from "formik";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as YUB from "yup";
 import { loginAPI } from "../redux/actions/loginAction";
+import { END_LOGIN } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 export default function LoginPage(props) {
   const { user, loginStatus } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: END_LOGIN,
+      });
+    };
+  }, []);
 
   const formik = useFormik({
     initialValues: {

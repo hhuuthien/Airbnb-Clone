@@ -16,14 +16,14 @@ export const signupAPI = (signupInfo) => {
           dispatch({
             type: SIGNUP_SUCCESS,
           });
-        }, 5000);
+        }, 1000);
       } else {
         // đăng kí thất bại
         setTimeout(() => {
           dispatch({
             type: SIGNUP_FAIL,
           });
-        }, 5000);
+        }, 1000);
       }
     } catch (error) {
       // đăng kí thất bại
@@ -31,7 +31,7 @@ export const signupAPI = (signupInfo) => {
         dispatch({
           type: SIGNUP_FAIL,
         });
-      }, 5000);
+      }, 1000);
       console.log(error);
     }
   };
