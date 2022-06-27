@@ -1,5 +1,5 @@
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Alert, Button, Input, Modal } from "antd";
+import { Alert, Button, Input, Modal, Menu, Dropdown } from "antd";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -65,6 +65,22 @@ export default function LocationAdmin({ location }) {
     },
   });
 
+  const menu = (
+    <Menu
+      items={[
+        {
+          label: <div onClick={() => showModal(location)}>Chỉnh sửa</div>,
+        },
+        {
+          label: <div>Đổi ảnh</div>,
+        },
+        {
+          label: <div onClick={() => confirmToDelete(location.name, location._id)}>Xoá</div>,
+        },
+      ]}
+    />
+  );
+
   return (
     <div className="location-admin-card">
       <div className="data">
@@ -83,12 +99,23 @@ export default function LocationAdmin({ location }) {
         </div>
       </div>
       <div className="action">
-        <Button type="primary" size="medium" onClick={() => showModal(location)}>
-          Chỉnh sửa
-        </Button>
-        <Button type="danger" size="medium" onClick={() => confirmToDelete(location.name, location._id)}>
-          Xoá
-        </Button>
+        {window.innerWidth >= 576 ? (
+          <>
+            <Button type="primary" onClick={() => showModal(location)}>
+              Chỉnh sửa
+            </Button>
+            <Button type="primary">Đổi ảnh</Button>
+            <Button type="danger" onClick={() => confirmToDelete(location.name, location._id)}>
+              Xoá
+            </Button>
+          </>
+        ) : (
+          <Dropdown overlay={menu} placement="bottomRight">
+            <Button type="primary">
+              <i className="fa-solid fa-ellipsis-vertical"></i>
+            </Button>
+          </Dropdown>
+        )}
       </div>
       <Modal
         id="updateLocationModal"
