@@ -1,8 +1,20 @@
-import { GET_LOCATION_FROM_API, UPDATE_ARRAY_BY_SEARCHING, UPDATE_ARRAY_BY_FILTERING, DELETE_LOCATION, UPDATE_LOCATION } from "../const/constant";
+import {
+  DELETE_LOCATION_END,
+  DELETE_LOCATION_FAIL,
+  DELETE_LOCATION_SUCCESS,
+  GET_LOCATION_FROM_API,
+  UPDATE_ARRAY_BY_FILTERING,
+  UPDATE_ARRAY_BY_SEARCHING,
+  UPDATE_LOCATION_END,
+  UPDATE_LOCATION_FAIL,
+  UPDATE_LOCATION_SUCCESS,
+} from "../const/constant";
 
 const defaultState = {
   locationList: [],
   locationListCopy: [],
+  updateStatus: "",
+  deleteStatus: "",
 };
 
 export const locationReducer = (state = defaultState, action) => {
@@ -26,27 +38,49 @@ export const locationReducer = (state = defaultState, action) => {
         locationList: action.data,
       };
     }
-    case DELETE_LOCATION: {
-      if (action.status === "success") {
-        let locationListUpdated = state.locationList.filter((location) => location._id !== action.data);
-        let locationListCopyUpdated = state.locationListCopy.filter((location) => location._id !== action.data);
-        return {
-          ...state,
-          locationList: locationListUpdated,
-          locationListCopy: locationListCopyUpdated,
-        };
-      }
+    case DELETE_LOCATION_SUCCESS: {
+      let locationListUpdated = state.locationList.filter((location) => location._id !== action.data);
+      let locationListCopyUpdated = state.locationListCopy.filter((location) => location._id !== action.data);
+      return {
+        ...state,
+        locationList: locationListUpdated,
+        locationListCopy: locationListCopyUpdated,
+        deleteStatus: "success",
+      };
     }
-    case UPDATE_LOCATION: {
-      if (action.status === "success") {
-        let index1 = state.locationList.findIndex((item) => item._id === action.data._id);
-        state.locationList.splice(index1, 1, action.data);
-        let index2 = state.locationListCopy.findIndex((item) => item._id === action.data._id);
-        state.locationListCopy.splice(index2, 1, action.data);
-        return {
-          ...state,
-        };
-      }
+    case DELETE_LOCATION_FAIL: {
+      return {
+        ...state,
+        deleteStatus: "fail",
+      };
+    }
+    case DELETE_LOCATION_END: {
+      return {
+        ...state,
+        deleteStatus: "",
+      };
+    }
+    case UPDATE_LOCATION_SUCCESS: {
+      let index1 = state.locationList.findIndex((item) => item._id === action.data._id);
+      state.locationList.splice(index1, 1, action.data);
+      let index2 = state.locationListCopy.findIndex((item) => item._id === action.data._id);
+      state.locationListCopy.splice(index2, 1, action.data);
+      return {
+        ...state,
+        updateStatus: "success",
+      };
+    }
+    case UPDATE_LOCATION_FAIL: {
+      return {
+        ...state,
+        updateStatus: "fail",
+      };
+    }
+    case UPDATE_LOCATION_END: {
+      return {
+        ...state,
+        updateStatus: "",
+      };
     }
     default: {
       return {
