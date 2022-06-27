@@ -7,7 +7,6 @@ import { getLocationAPI } from "../redux/actions/locationAction";
 export default function AdminLocation(props) {
   const dispatch = useDispatch();
   const { locationList } = useSelector((state) => state.locationReducer);
-  console.log(locationList);
 
   useEffect(() => {
     dispatch(getLocationAPI());

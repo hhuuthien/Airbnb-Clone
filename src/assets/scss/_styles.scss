@@ -11,6 +11,14 @@
   color: $primary-color;
 }
 
+.ant-modal-content {
+  .updateLocationModal-name,
+  .updateLocationModal-province,
+  .updateLocationModal-country {
+    margin-bottom: 18px;
+  }
+}
+
 @import "./components/header-home.scss";
 @import "./components/location.scss";
 @import "./components/location-admin.scss";
