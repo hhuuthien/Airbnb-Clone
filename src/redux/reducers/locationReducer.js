@@ -1,4 +1,4 @@
-import { GET_LOCATION_FROM_API, UPDATE_ARRAY_BY_SEARCHING, UPDATE_ARRAY_BY_FILTERING } from "../const/constant";
+import { GET_LOCATION_FROM_API, UPDATE_ARRAY_BY_SEARCHING, UPDATE_ARRAY_BY_FILTERING, DELETE_LOCATION } from "../const/constant";
 
 const defaultState = {
   locationList: [],
@@ -25,6 +25,17 @@ export const locationReducer = (state = defaultState, action) => {
         ...state,
         locationList: action.data,
       };
+    }
+    case DELETE_LOCATION: {
+      if (action.status === "success") {
+        let locationListUpdated = state.locationList.filter((location) => location._id !== action.data);
+        let locationListCopyUpdated = state.locationListCopy.filter((location) => location._id !== action.data);
+        return {
+          ...state,
+          locationList: locationListUpdated,
+          locationListCopy: locationListCopyUpdated,
+        };
+      }
     }
     default: {
       return {

@@ -67,7 +67,13 @@ export default function AdminHomePage(props) {
           />
         );
       } else {
-        return <h1>Xin chào admin</h1>;
+        return (
+          <div className="admin-content">
+            <Button type="primary" size="medium" onClick={() => props.history.push("/manage_location")}>
+              Quản lý vị trí
+            </Button>
+          </div>
+        );
       }
     }
   };

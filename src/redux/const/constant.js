@@ -10,3 +10,4 @@ export const START_SIGNUP = "START_SIGNUP";
 export const END_SIGNUP = "END_SIGNUP";
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
 export const SIGNUP_FAIL = "SIGNUP_FAIL";
+export const DELETE_LOCATION = "DELETE_LOCATION";

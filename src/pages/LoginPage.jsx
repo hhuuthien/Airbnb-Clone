@@ -41,7 +41,11 @@ export default function LoginPage(props) {
   // Nếu đăng nhập chưa xong thì ở lại đây tiếp tục
 
   if (localStorage.getItem(USER_LOGIN) && localStorage.getItem(ACCESS_TOKEN) && user.email) {
-    return <Redirect to="/account" />;
+    if (user.type === "ADMIN") {
+      return <Redirect to="/admin" />;
+    } else {
+      return <Redirect to="/account" />;
+    }
   }
 
   return (

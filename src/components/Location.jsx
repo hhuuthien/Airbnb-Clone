@@ -1,7 +1,7 @@
 import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
-export default function Location({ location, index }) {
+export default function Location({ location }) {
   return (
     <div className="location-card">
       <div className="image">
