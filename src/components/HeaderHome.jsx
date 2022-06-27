@@ -29,6 +29,10 @@ export default function HeaderHome(props) {
     props.history.push("/account");
   };
 
+  const goToAdminPage = () => {
+    props.history.push("/admin");
+  };
+
   const goToLoginPage = () => {
     props.history.push("/login");
   };
@@ -47,7 +51,7 @@ export default function HeaderHome(props) {
     });
   };
 
-  const menu1 = (
+  const menuClient = (
     <Menu
       items={[
         {
@@ -60,7 +64,23 @@ export default function HeaderHome(props) {
     />
   );
 
-  const menu2 = (
+  const menuAdmin = (
+    <Menu
+      items={[
+        {
+          label: <div onClick={goToAccountPage}>Trang cá nhân</div>,
+        },
+        {
+          label: <div onClick={goToAdminPage}>Trang quản trị</div>,
+        },
+        {
+          label: <div onClick={confirmToSignOut}>Đăng xuất</div>,
+        },
+      ]}
+    />
+  );
+
+  const menuNonUser = (
     <Menu
       items={[
         {
@@ -75,16 +95,26 @@ export default function HeaderHome(props) {
 
   const renderDropDown = () => {
     if (localStorage.getItem(USER_LOGIN) && localStorage.getItem(ACCESS_TOKEN) && user.email) {
-      return (
-        <Dropdown overlay={menu1} placement="bottomRight">
-          <div className="avatar">
-            <img src={user.avatar} alt={user.name} />
-          </div>
-        </Dropdown>
-      );
+      if (user.type === "ADMIN") {
+        return (
+          <Dropdown overlay={menuAdmin} placement="bottomRight">
+            <div className="avatar">
+              <img src={user.avatar} alt={user.name} />
+            </div>
+          </Dropdown>
+        );
+      } else {
+        return (
+          <Dropdown overlay={menuClient} placement="bottomRight">
+            <div className="avatar">
+              <img src={user.avatar} alt={user.name} />
+            </div>
+          </Dropdown>
+        );
+      }
     } else {
       return (
-        <Dropdown overlay={menu2} placement="bottomRight">
+        <Dropdown overlay={menuNonUser} placement="bottomRight">
           <div className="avatar">
             <img src="/img/user-blank.png" alt="User image" />
           </div>
