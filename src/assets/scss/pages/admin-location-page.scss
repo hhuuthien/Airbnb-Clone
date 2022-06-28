@@ -7,6 +7,12 @@
     margin: $container-margin;
     padding: $container-padding;
 
+    .create-location {
+      i {
+        margin-right: 5px;
+      }
+    }
+
     .location-list {
       padding: 30px 0;
     }

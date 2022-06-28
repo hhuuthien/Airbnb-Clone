@@ -1,4 +1,7 @@
 import {
+  CREATE_LOCATION_END,
+  CREATE_LOCATION_FAIL,
+  CREATE_LOCATION_SUCCESS,
   DELETE_LOCATION_END,
   DELETE_LOCATION_FAIL,
   DELETE_LOCATION_SUCCESS,
@@ -13,8 +16,9 @@ import {
 const defaultState = {
   locationList: [],
   locationListCopy: [],
-  updateStatus: "",
   deleteStatus: "",
+  updateStatus: "",
+  createStatus: "",
 };
 
 export const locationReducer = (state = defaultState, action) => {
@@ -80,6 +84,26 @@ export const locationReducer = (state = defaultState, action) => {
       return {
         ...state,
         updateStatus: "",
+      };
+    }
+    case CREATE_LOCATION_SUCCESS: {
+      return {
+        ...state,
+        locationList: [...state.locationList, action.data],
+        locationListCopy: [...state.locationListCopy, action.data],
+        createStatus: "success",
+      };
+    }
+    case CREATE_LOCATION_FAIL: {
+      return {
+        ...state,
+        createStatus: "fail",
+      };
+    }
+    case CREATE_LOCATION_END: {
+      return {
+        ...state,
+        createStatus: "",
       };
     }
     default: {

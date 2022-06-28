@@ -5,11 +5,12 @@ import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useDispatch } from "react-redux";
 import * as YUB from "yup";
-import { deleteLocationAPI, updateLocationAPI } from "../redux/actions/locationAction";
+import { deleteLocationAPI, updateLocationAPI, uploadImageLocationAPI } from "../redux/actions/locationAction";
 
 export default function LocationAdmin({ location }) {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
   const [id, setID] = useState("");
   const [name, setName] = useState("");
   const [province, setProvince] = useState("");
@@ -36,6 +37,10 @@ export default function LocationAdmin({ location }) {
     setCountry(location.country);
     setValueate(location.valueate);
     setID(location._id);
+  };
+
+  const showModal2 = () => {
+    setModalVisible2(true);
   };
 
   const formik = useFormik({
@@ -72,7 +77,7 @@ export default function LocationAdmin({ location }) {
           label: <div onClick={() => showModal(location)}>Chỉnh sửa</div>,
         },
         {
-          label: <div>Đổi ảnh</div>,
+          label: <div onClick={() => showModal2(location)}>Đổi ảnh</div>,
         },
         {
           label: <div onClick={() => confirmToDelete(location.name, location._id)}>Xoá</div>,
@@ -80,6 +85,12 @@ export default function LocationAdmin({ location }) {
       ]}
     />
   );
+
+  const uploadImage = (id) => {
+    setModalVisible2(false);
+    const file = document.getElementById(`file-${id}`).files[0];
+    dispatch(uploadImageLocationAPI(id, file));
+  };
 
   return (
     <div className="location-admin-card">
@@ -104,7 +115,9 @@ export default function LocationAdmin({ location }) {
             <Button type="primary" onClick={() => showModal(location)}>
               Chỉnh sửa
             </Button>
-            <Button type="primary">Đổi ảnh</Button>
+            <Button type="primary" onClick={() => showModal2(location)}>
+              Đổi ảnh
+            </Button>
             <Button type="danger" onClick={() => confirmToDelete(location.name, location._id)}>
               Xoá
             </Button>
@@ -117,16 +130,7 @@ export default function LocationAdmin({ location }) {
           </Dropdown>
         )}
       </div>
-      <Modal
-        id="updateLocationModal"
-        title="Chỉnh sửa vị trí"
-        centered
-        ok
-        visible={modalVisible}
-        okText="Cập nhật"
-        onOk={formik.handleSubmit}
-        onCancel={() => setModalVisible(false)}
-      >
+      <Modal title="Chỉnh sửa vị trí" centered visible={modalVisible} okText="Cập nhật" onOk={formik.handleSubmit} onCancel={() => setModalVisible(false)}>
         <div className="updateLocationModal-name">
           <label>Tên vị trí</label>
           <Input className="input-name" value={formik.values.name} onChange={formik.handleChange} name="name" allowClear />
@@ -150,6 +154,9 @@ export default function LocationAdmin({ location }) {
           <Input className="input-valueate" value={formik.values.valueate} onChange={formik.handleChange} name="valueate" allowClear />
           {formik.errors.valueate ? <Alert style={{ marginTop: 4 }} message={formik.errors.valueate} type="error" showIcon /> : null}
         </div>
+      </Modal>
+      <Modal title="Thay đổi hình ảnh" centered visible={modalVisible2} okText="Cập nhật" onOk={() => uploadImage(location._id)} onCancel={() => setModalVisible2(false)}>
+        <input type="file" name="file" id={`file-${location._id}`} accept="image/*" />
       </Modal>
     </div>
   );

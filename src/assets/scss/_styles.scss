@@ -14,7 +14,11 @@
 .ant-modal-content {
   .updateLocationModal-name,
   .updateLocationModal-province,
-  .updateLocationModal-country {
+  .updateLocationModal-country,
+  .createLocationModal-name,
+  .createLocationModal-province,
+  .createLocationModal-country,
+  .createLocationModal-valueate {
     margin-bottom: 18px;
   }
 }
