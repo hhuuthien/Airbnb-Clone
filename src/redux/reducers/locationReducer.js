@@ -1,10 +1,12 @@
 import {
+  CLEAR_LOCATION_DETAIL,
   CREATE_LOCATION_END,
   CREATE_LOCATION_FAIL,
   CREATE_LOCATION_SUCCESS,
   DELETE_LOCATION_END,
   DELETE_LOCATION_FAIL,
   DELETE_LOCATION_SUCCESS,
+  GET_LOCATION_DETAIL_API,
   GET_LOCATION_FROM_API,
   UPDATE_ARRAY_BY_FILTERING,
   UPDATE_ARRAY_BY_SEARCHING,
@@ -19,6 +21,7 @@ const defaultState = {
   deleteStatus: "",
   updateStatus: "",
   createStatus: "",
+  locationDetail: {},
 };
 
 export const locationReducer = (state = defaultState, action) => {
@@ -28,6 +31,18 @@ export const locationReducer = (state = defaultState, action) => {
         ...state,
         locationList: action.data,
         locationListCopy: action.data,
+      };
+    }
+    case GET_LOCATION_DETAIL_API: {
+      return {
+        ...state,
+        locationDetail: action.data,
+      };
+    }
+    case CLEAR_LOCATION_DETAIL: {
+      return {
+        ...state,
+        locationDetail: {},
       };
     }
     case UPDATE_ARRAY_BY_SEARCHING: {
@@ -43,13 +58,10 @@ export const locationReducer = (state = defaultState, action) => {
       };
     }
     case DELETE_LOCATION_SUCCESS: {
-      let locationListUpdated = state.locationList.filter((location) => location._id !== action.data);
-      let locationListCopyUpdated = state.locationListCopy.filter((location) => location._id !== action.data);
       return {
         ...state,
-        locationList: locationListUpdated,
-        locationListCopy: locationListCopyUpdated,
         deleteStatus: "success",
+        locationDetail: {},
       };
     }
     case DELETE_LOCATION_FAIL: {
@@ -65,13 +77,10 @@ export const locationReducer = (state = defaultState, action) => {
       };
     }
     case UPDATE_LOCATION_SUCCESS: {
-      let index1 = state.locationList.findIndex((item) => item._id === action.data._id);
-      state.locationList.splice(index1, 1, action.data);
-      let index2 = state.locationListCopy.findIndex((item) => item._id === action.data._id);
-      state.locationListCopy.splice(index2, 1, action.data);
       return {
         ...state,
         updateStatus: "success",
+        locationDetail: action.data,
       };
     }
     case UPDATE_LOCATION_FAIL: {

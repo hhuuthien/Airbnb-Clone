@@ -1,16 +1,15 @@
-import { Alert, Button, Input, message, Modal } from "antd";
+import { Alert, Button, Image, Input, message, Modal, Table } from "antd";
+import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import LocationAdmin from "../components/LocationAdmin";
-import { getLocationAPI, createLocationAPI } from "../redux/actions/locationAction";
-import { CREATE_LOCATION_END, DELETE_LOCATION_END, UPDATE_LOCATION_END } from "../redux/const/constant";
 import * as YUB from "yup";
-import { useFormik } from "formik";
+import { createLocationAPI, getLocationAPI } from "../redux/actions/locationAction";
+import { CREATE_LOCATION_END } from "../redux/const/constant";
 
 export default function AdminLocationPage(props) {
   const dispatch = useDispatch();
-  const { locationList, updateStatus, deleteStatus, createStatus } = useSelector((state) => state.locationReducer);
+  const { locationList, createStatus } = useSelector((state) => state.locationReducer);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -46,30 +45,6 @@ export default function AdminLocationPage(props) {
     },
   });
 
-  if (updateStatus === "success") {
-    message.success("Cập nhật thành công");
-    dispatch({
-      type: UPDATE_LOCATION_END,
-    });
-  } else if (updateStatus === "fail") {
-    message.error("Cập nhật không thành công. Vui lòng thử lại sau");
-    dispatch({
-      type: UPDATE_LOCATION_END,
-    });
-  }
-
-  if (deleteStatus === "success") {
-    message.success("Xoá thành công");
-    dispatch({
-      type: DELETE_LOCATION_END,
-    });
-  } else if (deleteStatus === "fail") {
-    message.error("Xoá không thành công. Vui lòng thử lại sau");
-    dispatch({
-      type: DELETE_LOCATION_END,
-    });
-  }
-
   if (createStatus === "success") {
     message.success("Tạo vị trí thành công");
     dispatch({
@@ -88,62 +63,118 @@ export default function AdminLocationPage(props) {
     return <Redirect to="/admin" />;
   }
 
+  const tableColumns = [
+    {
+      title: "Tên",
+      dataIndex: "name",
+      key: "name",
+      render: (text) => <b>{text}</b>,
+    },
+    {
+      title: "Hình ảnh",
+      dataIndex: "image",
+      key: "image",
+      render: (_, record) => {
+        return <Image width={100} src={record.image} fallback={"/img/airbnb-logo.png"} />;
+      },
+    },
+    {
+      title: "Tỉnh thành",
+      dataIndex: "province",
+      key: "province",
+    },
+    {
+      title: "Quốc gia",
+      dataIndex: "country",
+      key: "country",
+    },
+    {
+      title: "Đánh giá",
+      dataIndex: "valueate",
+      key: "valueate",
+      render: (_, record) => {
+        return (
+          <>
+            <i className="fa-regular fa-star" style={{ marginRight: 5 }}></i>
+            <span>{record.valueate}</span>
+          </>
+        );
+      },
+    },
+    {
+      title: "",
+      key: "action",
+      render: (_, record) => {
+        return (
+          <Button
+            type="primary"
+            onClick={() => {
+              props.history.push("/location/" + record._id);
+            }}
+          >
+            Xem chi tiết
+          </Button>
+        );
+      },
+    },
+  ];
+
   const renderLocationList = () => {
     return (
       <div className="location-list">
-        {locationList.map((location, index) => {
-          return <LocationAdmin location={location} key={index} />;
-        })}
+        <Table columns={tableColumns} dataSource={locationList} bordered rowKey={(record) => record._id} />
       </div>
     );
   };
 
   return (
-    <div className="admin-location-page">
-      <div className="container">
-        <Button type="primary" style={{ marginTop: 30 }} className="create-location" onClick={() => setModalVisible(true)}>
-          <i className="fa-solid fa-circle-plus"></i>
-          Tạo vị trí mới
-        </Button>
-        {renderLocationList()}
-        <Modal
-          title="Tạo vị trí"
-          centered
-          visible={modalVisible}
-          okText="Tạo vị trí"
-          onOk={formik.handleSubmit}
-          onCancel={() => {
-            setModalVisible(false);
-            formik.handleReset();
-          }}
-        >
-          <div className="createLocationModal-name">
-            <label>Tên vị trí</label>
-            <Input className="input-name" value={formik.values.name} onChange={formik.handleChange} name="name" allowClear />
-            {formik.errors.name ? <Alert style={{ marginTop: 4 }} message={formik.errors.name} type="error" showIcon /> : null}
-          </div>
-          <div className="createLocationModal-province">
-            <label>Tỉnh thành</label>
-            <Input className="input-province" value={formik.values.province} onChange={formik.handleChange} name="province" allowClear />
-            {formik.errors.province ? <Alert style={{ marginTop: 4 }} message={formik.errors.province} type="error" showIcon /> : null}
-          </div>
-          <div className="createLocationModal-country">
-            <label>Quốc gia</label>
-            <Input className="input-country" value={formik.values.country} onChange={formik.handleChange} name="country" allowClear />
-            {formik.errors.country ? <Alert style={{ marginTop: 4 }} message={formik.errors.country} type="error" showIcon /> : null}
-          </div>
-          <div className="createLocationModal-valueate">
-            <label>Đánh giá</label>
-            <Input className="input-valueate" value={formik.values.valueate} onChange={formik.handleChange} name="valueate" allowClear />
-            {formik.errors.valueate ? <Alert style={{ marginTop: 4 }} message={formik.errors.valueate} type="error" showIcon /> : null}
-          </div>
-          <div className="createLocationModal-image">
-            <label>Hình ảnh</label>
-            <br />
-            <input type="file" name="file" id="createLocationModal-image" accept="image/*" />
-          </div>
-        </Modal>
+    <>
+      <div className="admin-location-page">
+        <div className="container">
+          <Button type="primary" style={{ marginTop: 30 }} className="create-location" onClick={() => setModalVisible(true)}>
+            <i className="fa-solid fa-circle-plus"></i>
+            Tạo vị trí mới
+          </Button>
+          {renderLocationList()}
+        </div>
       </div>
-    </div>
+      <Modal
+        title="Tạo vị trí"
+        centered
+        visible={modalVisible}
+        okText="Tạo vị trí"
+        onOk={formik.handleSubmit}
+        onCancel={() => {
+          setModalVisible(false);
+          formik.handleReset();
+        }}
+      >
+        <div className="createLocationModal-name">
+          <label>Tên vị trí</label>
+          <Input className="input-name" value={formik.values.name} onChange={formik.handleChange} name="name" allowClear />
+          {formik.errors.name ? <Alert style={{ marginTop: 4 }} message={formik.errors.name} type="error" showIcon /> : null}
+        </div>
+        <div className="createLocationModal-province">
+          <label>Tỉnh thành</label>
+          <Input className="input-province" value={formik.values.province} onChange={formik.handleChange} name="province" allowClear />
+          {formik.errors.province ? <Alert style={{ marginTop: 4 }} message={formik.errors.province} type="error" showIcon /> : null}
+        </div>
+        <div className="createLocationModal-country">
+          <label>Quốc gia</label>
+          <Input className="input-country" value={formik.values.country} onChange={formik.handleChange} name="country" allowClear />
+          {formik.errors.country ? <Alert style={{ marginTop: 4 }} message={formik.errors.country} type="error" showIcon /> : null}
+        </div>
+        <div className="createLocationModal-valueate">
+          <label>Đánh giá</label>
+          <Input className="input-valueate" value={formik.values.valueate} onChange={formik.handleChange} name="valueate" allowClear />
+          {formik.errors.valueate ? <Alert style={{ marginTop: 4 }} message={formik.errors.valueate} type="error" showIcon /> : null}
+        </div>
+        <div className="createLocationModal-image">
+          <label>Hình ảnh</label>
+          <br />
+          <input type="file" name="file" id="createLocationModal-image" accept="image/*" />
+        </div>
+      </Modal>
+    </>
   );
 }

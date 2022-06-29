@@ -1,10 +1,10 @@
 import { http } from "../../util/setting";
 import {
-  CREATE_LOCATION_END,
   CREATE_LOCATION_FAIL,
   CREATE_LOCATION_SUCCESS,
   DELETE_LOCATION_FAIL,
   DELETE_LOCATION_SUCCESS,
+  GET_LOCATION_DETAIL_API,
   GET_LOCATION_FROM_API,
   UPDATE_LOCATION_FAIL,
   UPDATE_LOCATION_SUCCESS,
@@ -16,6 +16,20 @@ export const getLocationAPI = () => {
       let result = await http.get("/api/locations");
       dispatch({
         type: GET_LOCATION_FROM_API,
+        data: result.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const getLocationDetailAPI = (id) => {
+  return async (dispatch) => {
+    try {
+      let result = await http.get("/api/locations/" + id);
+      dispatch({
+        type: GET_LOCATION_DETAIL_API,
         data: result.data,
       });
     } catch (error) {
