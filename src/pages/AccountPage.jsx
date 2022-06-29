@@ -7,7 +7,7 @@ export default function AccountPage() {
   // Nếu đã đăng nhập thì ở lại trang này render thông tin ra
   // Điều kiện đã đăng nhập phải có đủ: USER_LOGIN, ACCESS_TOKEN và user trong redux
 
-  const { user } = useSelector((state) => state.userReducer);
+  const { user } = useSelector((state) => state.accountReducer);
 
   if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
     return <Redirect to="/login" />;

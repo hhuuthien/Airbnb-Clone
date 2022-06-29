@@ -9,7 +9,7 @@ import { END_SIGNUP } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 export default function SignupPage(props) {
-  const { user, signupStatus } = useSelector((state) => state.userReducer);
+  const { user, signupStatus } = useSelector((state) => state.accountReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {

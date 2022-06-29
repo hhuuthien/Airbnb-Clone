@@ -9,7 +9,8 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import AccountPage from "./pages/AccountPage";
 import AdminHomePage from "./pages/AdminHomePage";
-import AdminLocation from "./pages/AdminLocation";
+import AdminLocationPage from "./pages/AdminLocationPage";
+import AdminUserPage from "./pages/AdminUserPage";
 import HeaderTemplate from "./templates/HeaderTemplate";
 
 function App() {
@@ -20,7 +21,8 @@ function App() {
         <HeaderTemplate path="/signup" component={SignupPage} />
         <HeaderTemplate path="/account" component={AccountPage} />
         <HeaderTemplate path="/admin" component={AdminHomePage} />
-        <HeaderTemplate path="/manage_location" component={AdminLocation} />
+        <HeaderTemplate path="/manage_location" component={AdminLocationPage} />
+        <HeaderTemplate path="/manage_user" component={AdminUserPage} />
         <HeaderTemplate path="/" component={HomePage} />
       </Switch>
     </BrowserRouter>

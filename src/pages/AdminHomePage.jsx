@@ -5,7 +5,7 @@ import { SIGN_OUT } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 export default function AdminHomePage(props) {
-  const { user } = useSelector((state) => state.userReducer);
+  const { user } = useSelector((state) => state.accountReducer);
   const dispatch = useDispatch();
 
   const signOut = () => {
@@ -71,6 +71,9 @@ export default function AdminHomePage(props) {
           <div className="admin-content">
             <Button type="primary" size="medium" onClick={() => props.history.push("/manage_location")}>
               Quản lý vị trí
+            </Button>
+            <Button type="primary" size="medium" onClick={() => props.history.push("/manage_user")}>
+              Quản lý người dùng
             </Button>
           </div>
         );

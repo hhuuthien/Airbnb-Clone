@@ -8,7 +8,7 @@ import { CREATE_LOCATION_END, DELETE_LOCATION_END, UPDATE_LOCATION_END } from ".
 import * as YUB from "yup";
 import { useFormik } from "formik";
 
-export default function AdminLocation(props) {
+export default function AdminLocationPage(props) {
   const dispatch = useDispatch();
   const { locationList, updateStatus, deleteStatus, createStatus } = useSelector((state) => state.locationReducer);
 

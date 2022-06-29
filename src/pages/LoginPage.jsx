@@ -9,7 +9,7 @@ import { END_LOGIN } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 export default function LoginPage(props) {
-  const { user, loginStatus } = useSelector((state) => state.userReducer);
+  const { user, loginStatus } = useSelector((state) => state.accountReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {

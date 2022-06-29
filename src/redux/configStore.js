@@ -1,10 +1,12 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import reduxThunk from "redux-thunk";
 import { locationReducer } from "./reducers/locationReducer";
+import { accountReducer } from "./reducers/accountReducer";
 import { userReducer } from "./reducers/userReducer";
 
 const rootReducer = combineReducers({
   locationReducer,
+  accountReducer,
   userReducer,
 });
 

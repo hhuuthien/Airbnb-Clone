@@ -5,7 +5,7 @@ import { SIGN_OUT } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 export default function HeaderHome(props) {
-  const { user } = useSelector((root) => root.userReducer);
+  const { user } = useSelector((root) => root.accountReducer);
   const dispatch = useDispatch();
 
   const handleLogoClick = () => {
