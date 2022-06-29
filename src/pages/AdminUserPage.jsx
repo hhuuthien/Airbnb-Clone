@@ -7,7 +7,6 @@ import { getUserAPI } from "../redux/actions/userAction";
 export default function AdminUserPage(props) {
   const dispatch = useDispatch();
   const { userList } = useSelector((root) => root.userReducer);
-  console.log(userList);
 
   useEffect(() => {
     dispatch(getUserAPI());
@@ -54,7 +53,7 @@ export default function AdminUserPage(props) {
           <Button
             type="primary"
             onClick={() => {
-              console.log(record);
+              props.history.push("/user/" + record._id);
             }}
           >
             Xem chi tiết

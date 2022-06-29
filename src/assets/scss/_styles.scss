@@ -18,7 +18,13 @@
   .createLocationModal-name,
   .createLocationModal-province,
   .createLocationModal-country,
-  .createLocationModal-valueate {
+  .createLocationModal-valueate,
+  .updateUserModal-name,
+  .updateUserModal-email,
+  .updateUserModal-phone,
+  .updateUserModal-birthday,
+  .updateUserModal-address,
+  .updateUserModal-gender {
     margin-bottom: 18px;
   }
 }
@@ -34,3 +40,4 @@
 @import "./pages/admin-home-page.scss";
 @import "./pages/admin-location-page.scss";
 @import "./pages/admin-user-page.scss";
+@import "./pages/admin-user-detail-page.scss";

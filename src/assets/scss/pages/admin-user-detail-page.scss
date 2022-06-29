@@ -1,0 +1,19 @@
+@import "../base/base.scss";
+
+.admin-user-detail-page {
+  .container {
+    width: 100%;
+    max-width: $container-width;
+    margin: $container-margin;
+    padding: $container-padding;
+
+    .content {
+      padding: 30px 0;
+
+      .action {
+        margin-bottom: 30px;
+        text-align: right;
+      }
+    }
+  }
+}
