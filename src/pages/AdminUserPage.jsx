@@ -22,17 +22,19 @@ export default function AdminUserPage(props) {
     dispatch(getUserAPI());
   }, []);
 
-  if (createStatus === "success") {
-    message.success("Tạo thành công");
-    dispatch({
-      type: CREATE_USER_END,
-    });
-  } else if (createStatus === "fail") {
-    message.error("Tạo không thành công. Vui lòng thử lại sau");
-    dispatch({
-      type: CREATE_USER_END,
-    });
-  }
+  useEffect(() => {
+    if (createStatus === "success") {
+      message.success("Tạo thành công");
+      dispatch({
+        type: CREATE_USER_END,
+      });
+    } else if (createStatus === "fail") {
+      message.error("Tạo không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: CREATE_USER_END,
+      });
+    }
+  }, [createStatus]);
 
   const formik = useFormik({
     initialValues: {

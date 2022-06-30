@@ -45,17 +45,19 @@ export default function AdminLocationPage(props) {
     },
   });
 
-  if (createStatus === "success") {
-    message.success("Tạo vị trí thành công");
-    dispatch({
-      type: CREATE_LOCATION_END,
-    });
-  } else if (createStatus === "fail") {
-    message.error("Tạo vị trí không thành công. Vui lòng thử lại sau");
-    dispatch({
-      type: CREATE_LOCATION_END,
-    });
-  }
+  useEffect(() => {
+    if (createStatus === "success") {
+      message.success("Tạo vị trí thành công");
+      dispatch({
+        type: CREATE_LOCATION_END,
+      });
+    } else if (createStatus === "fail") {
+      message.error("Tạo vị trí không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: CREATE_LOCATION_END,
+      });
+    }
+  }, [createStatus]);
 
   // props.history.action === "PUSH": user đến đây từ trang admin home bằng phương thức push -> hợp lệ
   // props.history.action === "POP": user tự nhập URL (không thể xác định có đăng nhập hay chưa) -> không hợp lệ

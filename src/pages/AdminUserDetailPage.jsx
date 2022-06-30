@@ -27,30 +27,34 @@ export default function AdminUserDetailPage(props) {
     };
   }, []);
 
-  if (updateStatus === "success") {
-    message.success("Cập nhật thành công");
-    dispatch({
-      type: UPDATE_USER_END,
-    });
-  } else if (updateStatus === "fail") {
-    message.error("Cập nhật không thành công. Vui lòng thử lại sau");
-    dispatch({
-      type: UPDATE_USER_END,
-    });
-  }
+  useEffect(() => {
+    if (updateStatus === "success") {
+      message.success("Cập nhật thành công");
+      dispatch({
+        type: UPDATE_USER_END,
+      });
+    } else if (updateStatus === "fail") {
+      message.error("Cập nhật không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: UPDATE_USER_END,
+      });
+    }
+  }, [updateStatus]);
 
-  if (deleteStatus === "success") {
-    message.success("Xoá thành công");
-    dispatch({
-      type: DELETE_USER_END,
-    });
-    props.history.goBack();
-  } else if (deleteStatus === "fail") {
-    message.error("Xoá không thành công. Vui lòng thử lại sau");
-    dispatch({
-      type: DELETE_USER_END,
-    });
-  }
+  useEffect(() => {
+    if (deleteStatus === "success") {
+      message.success("Xoá thành công");
+      dispatch({
+        type: DELETE_USER_END,
+      });
+      props.history.goBack();
+    } else if (deleteStatus === "fail") {
+      message.error("Xoá không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: DELETE_USER_END,
+      });
+    }
+  }, [deleteStatus]);
 
   const showModal = () => {
     setModalVisible(true);
