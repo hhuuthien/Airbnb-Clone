@@ -13,6 +13,8 @@ import AdminLocationPage from "./pages/AdminLocationPage";
 import AdminLocationDetailPage from "./pages/AdminLocationDetailPage";
 import AdminUserPage from "./pages/AdminUserPage";
 import AdminUserDetailPage from "./pages/AdminUserDetailPage";
+
+// templates
 import HeaderTemplate from "./templates/HeaderTemplate";
 
 function App() {

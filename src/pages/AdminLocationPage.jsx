@@ -6,10 +6,12 @@ import { Redirect } from "react-router-dom";
 import * as YUB from "yup";
 import { createLocationAPI, getLocationAPI } from "../redux/actions/locationAction";
 import { CREATE_LOCATION_END } from "../redux/const/constant";
+import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 export default function AdminLocationPage(props) {
   const dispatch = useDispatch();
   const { locationList, createStatus } = useSelector((state) => state.locationReducer);
+  const { user } = useSelector((state) => state.accountReducer);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -58,12 +60,6 @@ export default function AdminLocationPage(props) {
       });
     }
   }, [createStatus]);
-
-  // props.history.action === "PUSH": user đến đây từ trang admin home bằng phương thức push -> hợp lệ
-  // props.history.action === "POP": user tự nhập URL (không thể xác định có đăng nhập hay chưa) -> không hợp lệ
-  if (props.history.action !== "PUSH") {
-    return <Redirect to="/admin" />;
-  }
 
   const tableColumns = [
     {
@@ -129,54 +125,63 @@ export default function AdminLocationPage(props) {
     );
   };
 
-  return (
-    <>
-      <div className="admin-location-page">
-        <div className="container">
-          <Button type="primary" style={{ marginTop: 30 }} className="create-location" onClick={() => setModalVisible(true)}>
-            <i className="fa-solid fa-circle-plus"></i>
-            Tạo vị trí mới
-          </Button>
-          {renderLocationList()}
-        </div>
-      </div>
-      <Modal
-        title="Tạo vị trí"
-        centered
-        visible={modalVisible}
-        okText="Tạo vị trí"
-        onOk={formik.handleSubmit}
-        onCancel={() => {
-          setModalVisible(false);
-          formik.handleReset();
-        }}
-      >
-        <div className="createLocationModal-name">
-          <label>Tên vị trí</label>
-          <Input className="input-name" value={formik.values.name} onChange={formik.handleChange} name="name" allowClear />
-          {formik.errors.name ? <Alert style={{ marginTop: 4 }} message={formik.errors.name} type="error" showIcon /> : null}
-        </div>
-        <div className="createLocationModal-province">
-          <label>Tỉnh thành</label>
-          <Input className="input-province" value={formik.values.province} onChange={formik.handleChange} name="province" allowClear />
-          {formik.errors.province ? <Alert style={{ marginTop: 4 }} message={formik.errors.province} type="error" showIcon /> : null}
-        </div>
-        <div className="createLocationModal-country">
-          <label>Quốc gia</label>
-          <Input className="input-country" value={formik.values.country} onChange={formik.handleChange} name="country" allowClear />
-          {formik.errors.country ? <Alert style={{ marginTop: 4 }} message={formik.errors.country} type="error" showIcon /> : null}
-        </div>
-        <div className="createLocationModal-valueate">
-          <label>Đánh giá</label>
-          <Input className="input-valueate" value={formik.values.valueate} onChange={formik.handleChange} name="valueate" allowClear />
-          {formik.errors.valueate ? <Alert style={{ marginTop: 4 }} message={formik.errors.valueate} type="error" showIcon /> : null}
-        </div>
-        <div className="createLocationModal-image">
-          <label>Hình ảnh</label>
-          <br />
-          <input type="file" name="file" id="createLocationModal-image" accept="image/*" />
-        </div>
-      </Modal>
-    </>
-  );
+  // Nếu chưa đăng nhập hoặc đã đăng nhập nhưng không phải tài khoản admin --> redirect
+  if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
+    return <Redirect to="/admin" />;
+  } else {
+    if (user.type !== "ADMIN") {
+      return <Redirect to="/admin" />;
+    } else {
+      return (
+        <>
+          <div className="admin-location-page">
+            <div className="container">
+              <Button type="primary" style={{ marginTop: 30 }} className="create-location" onClick={() => setModalVisible(true)}>
+                <i className="fa-solid fa-circle-plus"></i>
+                Tạo vị trí mới
+              </Button>
+              {renderLocationList()}
+            </div>
+          </div>
+          <Modal
+            title="Tạo vị trí"
+            centered
+            visible={modalVisible}
+            okText="Tạo vị trí"
+            onOk={formik.handleSubmit}
+            onCancel={() => {
+              setModalVisible(false);
+              formik.handleReset();
+            }}
+          >
+            <div className="createLocationModal-name">
+              <label>Tên vị trí</label>
+              <Input className="input-name" value={formik.values.name} onChange={formik.handleChange} name="name" allowClear />
+              {formik.errors.name ? <Alert style={{ marginTop: 4 }} message={formik.errors.name} type="error" showIcon /> : null}
+            </div>
+            <div className="createLocationModal-province">
+              <label>Tỉnh thành</label>
+              <Input className="input-province" value={formik.values.province} onChange={formik.handleChange} name="province" allowClear />
+              {formik.errors.province ? <Alert style={{ marginTop: 4 }} message={formik.errors.province} type="error" showIcon /> : null}
+            </div>
+            <div className="createLocationModal-country">
+              <label>Quốc gia</label>
+              <Input className="input-country" value={formik.values.country} onChange={formik.handleChange} name="country" allowClear />
+              {formik.errors.country ? <Alert style={{ marginTop: 4 }} message={formik.errors.country} type="error" showIcon /> : null}
+            </div>
+            <div className="createLocationModal-valueate">
+              <label>Đánh giá</label>
+              <Input className="input-valueate" value={formik.values.valueate} onChange={formik.handleChange} name="valueate" allowClear />
+              {formik.errors.valueate ? <Alert style={{ marginTop: 4 }} message={formik.errors.valueate} type="error" showIcon /> : null}
+            </div>
+            <div className="createLocationModal-image">
+              <label>Hình ảnh</label>
+              <br />
+              <input type="file" name="file" id="createLocationModal-image" accept="image/*" />
+            </div>
+          </Modal>
+        </>
+      );
+    }
+  }
 }
