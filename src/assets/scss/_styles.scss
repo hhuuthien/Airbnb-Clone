@@ -24,7 +24,14 @@
   .updateUserModal-phone,
   .updateUserModal-birthday,
   .updateUserModal-address,
-  .updateUserModal-gender {
+  .updateUserModal-gender,
+  .createUser-name,
+  .createUser-email,
+  .createUser-password,
+  .createUser-phone,
+  .createUser-birthday,
+  .createUser-gender,
+  .createUser-type {
     margin-bottom: 18px;
   }
 }

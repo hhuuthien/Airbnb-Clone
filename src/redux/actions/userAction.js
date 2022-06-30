@@ -1,5 +1,5 @@
 import { http } from "../../util/setting";
-import { GET_USER, GET_USER_DETAIL } from "../const/constant";
+import { CREATE_USER_FAIL, CREATE_USER_SUCCESS, DELETE_USER_FAIL, DELETE_USER_SUCCESS, GET_USER, GET_USER_DETAIL, UPDATE_USER_FAIL, UPDATE_USER_SUCCESS } from "../const/constant";
 
 export const getUserAPI = () => {
   return async (dispatch) => {
@@ -31,18 +31,52 @@ export const getUserDetailAPI = (id) => {
   };
 };
 
-export const updateUserDetailAPI = (id, info) => {
+export const updateUserAPI = (id, info) => {
   return async (dispatch) => {
     try {
-      let result = await http.put("/api/users/" + id);
-      console.log(result);
+      let result = await http.put("/api/users/" + id, info);
 
-      //   dispatch({
-      //     type: GET_USER_DETAIL,
-      //     data: result.data,
-      //   });
+      dispatch({
+        type: UPDATE_USER_SUCCESS,
+        data: result.data,
+      });
     } catch (error) {
-      console.log(error);
+      dispatch({
+        type: UPDATE_USER_FAIL,
+      });
+    }
+  };
+};
+
+export const deleteUserAPI = (id) => {
+  return async (dispatch) => {
+    try {
+      let result = await http.delete("/api/users/" + id);
+
+      dispatch({
+        type: DELETE_USER_SUCCESS,
+      });
+    } catch (error) {
+      dispatch({
+        type: DELETE_USER_FAIL,
+      });
+    }
+  };
+};
+
+export const createUserAPI = (info) => {
+  return async (dispatch) => {
+    try {
+      let result = await http.post("/api/users", info);
+
+      dispatch({
+        type: CREATE_USER_SUCCESS,
+        data: result.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: CREATE_USER_FAIL,
+      });
     }
   };
 };

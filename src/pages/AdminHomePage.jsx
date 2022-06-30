@@ -69,10 +69,11 @@ export default function AdminHomePage(props) {
       } else {
         return (
           <div className="admin-content">
-            <Button type="primary" size="medium" onClick={() => props.history.push("/manage_location")}>
+            <Button type="primary" onClick={() => props.history.push("/manage_location")} style={{ width: 200, marginBottom: 10 }}>
               Quản lý vị trí
             </Button>
-            <Button type="primary" size="medium" onClick={() => props.history.push("/manage_user")}>
+            <br />
+            <Button type="primary" onClick={() => props.history.push("/manage_user")} style={{ width: 200, marginBottom: 10 }}>
               Quản lý người dùng
             </Button>
           </div>

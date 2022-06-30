@@ -7,6 +7,12 @@
     margin: $container-margin;
     padding: $container-padding;
 
+    .create-user {
+      i {
+        margin-right: 5px;
+      }
+    }
+
     .user-list {
       padding: 30px 0;
     }

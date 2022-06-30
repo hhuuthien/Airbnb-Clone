@@ -1,15 +1,18 @@
-import { Button, Descriptions, Image, Input, Modal, Select } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Button, Descriptions, Image, Input, message, Modal, Select } from "antd";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserDetailAPI, updateUserDetailAPI } from "../redux/actions/userAction";
-import { CLEAR_USER_DETAIL } from "../redux/const/constant";
+import { deleteUserAPI, getUserDetailAPI, updateUserAPI } from "../redux/actions/userAction";
+import { CLEAR_USER_DETAIL, DELETE_USER_END, UPDATE_USER_END } from "../redux/const/constant";
 const { Option } = Select;
 
 export default function AdminUserDetailPage(props) {
   const dispatch = useDispatch();
-  const { userDetail } = useSelector((root) => root.userReducer);
+  const { userDetail, updateStatus, deleteStatus } = useSelector((root) => root.userReducer);
+
   const [modalVisible, setModalVisible] = useState(false);
+
   const [gender, setGender] = useState(true);
   const [type, setType] = useState("CLIENT");
 
@@ -24,8 +27,48 @@ export default function AdminUserDetailPage(props) {
     };
   }, []);
 
+  if (updateStatus === "success") {
+    message.success("Cập nhật thành công");
+    dispatch({
+      type: UPDATE_USER_END,
+    });
+  } else if (updateStatus === "fail") {
+    message.error("Cập nhật không thành công. Vui lòng thử lại sau");
+    dispatch({
+      type: UPDATE_USER_END,
+    });
+  }
+
+  if (deleteStatus === "success") {
+    message.success("Xoá thành công");
+    dispatch({
+      type: DELETE_USER_END,
+    });
+    props.history.goBack();
+  } else if (deleteStatus === "fail") {
+    message.error("Xoá không thành công. Vui lòng thử lại sau");
+    dispatch({
+      type: DELETE_USER_END,
+    });
+  }
+
   const showModal = () => {
     setModalVisible(true);
+    setType(userDetail.type);
+    setGender(userDetail.gender);
+  };
+
+  const confirmToDelete = (name, email, id) => {
+    Modal.confirm({
+      title: "Xoá user",
+      icon: <QuestionCircleOutlined />,
+      content: `Bạn có muốn xoá user "${name}" (${email}) không?`,
+      okText: "Xoá",
+      cancelText: "Cancel",
+      onOk() {
+        dispatch(deleteUserAPI(id));
+      },
+    });
   };
 
   const handleChangeGender = (gender) => {
@@ -50,7 +93,7 @@ export default function AdminUserDetailPage(props) {
       setModalVisible(false);
       formik.handleReset();
       const fullValues = { ...values, gender, type };
-      dispatch(updateUserDetailAPI(uid, fullValues));
+      dispatch(updateUserAPI(uid, fullValues));
     },
   });
 
@@ -63,12 +106,14 @@ export default function AdminUserDetailPage(props) {
               <Button type="primary" onClick={showModal}>
                 Cập nhật thông tin
               </Button>
+              <Button type="primary" danger onClick={() => confirmToDelete(userDetail.name, userDetail.email, uid)} style={{ marginLeft: 5 }}>
+                Xoá
+              </Button>
             </div>
             <Descriptions bordered column={1}>
               <Descriptions.Item label="ID">{userDetail._id}</Descriptions.Item>
               <Descriptions.Item label="Tên">{userDetail.name}</Descriptions.Item>
               <Descriptions.Item label="Email">{userDetail.email}</Descriptions.Item>
-              <Descriptions.Item label="Mật khẩu">******</Descriptions.Item>
               <Descriptions.Item label="Số điện thoại">{userDetail.phone}</Descriptions.Item>
               <Descriptions.Item label="Ngày sinh">{userDetail.birthday}</Descriptions.Item>
               <Descriptions.Item label="Giới tính">{userDetail.gender ? "Nam" : "Nữ"}</Descriptions.Item>
@@ -107,6 +152,7 @@ export default function AdminUserDetailPage(props) {
           <br />
           <Select
             onChange={handleChangeGender}
+            value={gender ? "Nam" : "Nữ"}
             className="input-gender"
             style={{
               width: "100%",
@@ -121,6 +167,7 @@ export default function AdminUserDetailPage(props) {
           <br />
           <Select
             onChange={handleChangeType}
+            value={type}
             className="input-type"
             style={{
               width: "100%",
