@@ -51,7 +51,7 @@ export default function SignupPage(props) {
         password: values.password2,
         phone: "",
         birthday: "",
-        gender: null,
+        gender: true,
         address: "",
       };
       console.log("signupInfo", signupInfo);
@@ -100,6 +100,9 @@ export default function SignupPage(props) {
                 Đăng ký tài khoản
               </Button>
             )}
+            <div className="link-to-login" onClick={() => props.history.replace("/login")}>
+              Đã có tài khoản? Hãy đăng nhập
+            </div>
             {signupStatus === "fail" ? (
               <Alert style={{ marginTop: 10 }} message="Đã xảy ra lỗi" description="Vui lòng kiểm tra lại thông tin hoặc thử lại sau" type="error" showIcon closable />
             ) : null}

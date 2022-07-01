@@ -31,13 +31,17 @@ $avatar-size: 90px;
 
       .data {
         .name {
-          font-size: 1.1rem;
+          font-size: 1.2rem;
           font-weight: bold;
+          margin-bottom: 4px;
+        }
+
+        .type {
+          margin-bottom: 6px;
         }
 
         i {
           width: 22px;
-          color: $primary-color;
         }
       }
     }

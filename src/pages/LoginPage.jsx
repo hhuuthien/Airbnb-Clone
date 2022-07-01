@@ -73,6 +73,9 @@ export default function LoginPage(props) {
                 Đăng nhập
               </Button>
             )}
+            <div className="link-to-signup" onClick={() => props.history.replace("/signup")}>
+              Chưa có tài khoản? Đăng kí ngay
+            </div>
             {loginStatus === "fail" ? (
               <Alert style={{ marginTop: 10 }} message="Đã xảy ra lỗi" description="Vui lòng kiểm tra lại email và mật khẩu" type="error" showIcon closable />
             ) : null}

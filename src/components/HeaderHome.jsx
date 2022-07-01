@@ -1,5 +1,5 @@
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Dropdown, Menu, Modal } from "antd";
+import { Dropdown, Menu, Modal, Image } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { SIGN_OUT } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
@@ -99,7 +99,7 @@ export default function HeaderHome(props) {
         return (
           <Dropdown overlay={menuAdmin} placement="bottomRight">
             <div className="avatar">
-              <img src={user.avatar} alt={user.name} />
+              <Image width={30} height={30} alt={user.name} src={user.avatar || "/img/user-blank-color.png"} fallback={"/img/user-blank.png"} preview={false} />
             </div>
           </Dropdown>
         );
@@ -107,7 +107,7 @@ export default function HeaderHome(props) {
         return (
           <Dropdown overlay={menuClient} placement="bottomRight">
             <div className="avatar">
-              <img src={user.avatar} alt={user.name} />
+              <Image width={30} height={30} alt={user.name} src={user.avatar || "/img/user-blank-color.png"} fallback={"/img/user-blank.png"} preview={false} />
             </div>
           </Dropdown>
         );
@@ -129,7 +129,6 @@ export default function HeaderHome(props) {
         <div className="logo">
           <img src="/img/logo-text.png" alt="Airbnb logo" onClick={handleLogoClick} />
         </div>
-        <div className="search"></div>
         <div className="account">{renderDropDown()}</div>
       </div>
     </div>
