@@ -3,11 +3,13 @@ import reduxThunk from "redux-thunk";
 import { locationReducer } from "./reducers/locationReducer";
 import { accountReducer } from "./reducers/accountReducer";
 import { userReducer } from "./reducers/userReducer";
+import { roomReducer } from "./reducers/roomReducer";
 
 const rootReducer = combineReducers({
   locationReducer,
   accountReducer,
   userReducer,
+  roomReducer,
 });
 
 const middleWare = applyMiddleware(reduxThunk);

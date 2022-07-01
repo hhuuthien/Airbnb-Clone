@@ -7,7 +7,7 @@ import { getLocationAPI } from "../redux/actions/locationAction";
 import { UPDATE_ARRAY_BY_FILTERING, UPDATE_ARRAY_BY_SEARCHING } from "../redux/const/constant";
 const { Search } = Input;
 
-export default function HomePage() {
+export default function HomePage(props) {
   const { locationList, locationListCopy } = useSelector((state) => state.locationReducer);
   const dispatch = useDispatch();
 
@@ -128,7 +128,7 @@ export default function HomePage() {
       <>
         <div className="location-list">
           {list.slice(startIndex, startIndex + DEFAULT_PAGE_SIZE).map((location, index) => {
-            return <Location key={index} location={location} index={index} />;
+            return <Location key={index} location={location} index={index} history={props.history} />;
           })}
         </div>
         <div className="pagination">

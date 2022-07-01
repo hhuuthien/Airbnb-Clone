@@ -1,9 +1,16 @@
 import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
-export default function Location({ location }) {
+export default function Location(props) {
+  const { location } = props;
+
   return (
-    <div className="location-card">
+    <div
+      className="location-card"
+      onClick={() => {
+        props.history.push("/l/" + location._id);
+      }}
+    >
       <div className="image">
         <LazyLoadImage alt={location.name} src={location.image} />
       </div>

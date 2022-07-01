@@ -13,6 +13,7 @@ import AdminLocationPage from "./pages/AdminLocationPage";
 import AdminLocationDetailPage from "./pages/AdminLocationDetailPage";
 import AdminUserPage from "./pages/AdminUserPage";
 import AdminUserDetailPage from "./pages/AdminUserDetailPage";
+import LocationDetailPage from "./pages/LocationDetailPage";
 
 // templates
 import HeaderTemplate from "./templates/HeaderTemplate";
@@ -29,6 +30,7 @@ function App() {
         <HeaderTemplate path="/location/:lid" component={AdminLocationDetailPage} />
         <HeaderTemplate path="/manage_user" component={AdminUserPage} />
         <HeaderTemplate path="/user/:uid" component={AdminUserDetailPage} />
+        <HeaderTemplate path="/l/:lid" component={LocationDetailPage} />
         <HeaderTemplate path="/" component={HomePage} />
       </Switch>
     </BrowserRouter>
