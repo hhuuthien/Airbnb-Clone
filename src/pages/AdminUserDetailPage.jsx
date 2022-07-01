@@ -120,6 +120,9 @@ export default function AdminUserDetailPage(props) {
                   <Button type="primary" onClick={showModal}>
                     Cập nhật thông tin
                   </Button>
+                  <Button type="primary" disabled style={{ marginLeft: 5 }}>
+                    Cập nhật ảnh đại diện
+                  </Button>
                   <Button type="primary" danger onClick={() => confirmToDelete(userDetail.name, userDetail.email, uid)} style={{ marginLeft: 5 }}>
                     Xoá
                   </Button>
