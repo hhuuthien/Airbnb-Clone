@@ -4,7 +4,7 @@
   width: 100%;
   position: relative;
 
-  &:hover img {
+  &:hover .card-image img {
     transform: scale(1.1);
   }
 
@@ -35,6 +35,17 @@
       font-weight: bold;
       cursor: pointer;
       transition: $transition-value;
+    }
+
+    .card-room {
+      color: grey;
+    }
+
+    .furniture {
+      width: 12px;
+      margin-right: 10px;
+      opacity: 0.8;
+      cursor: pointer;
     }
   }
 }

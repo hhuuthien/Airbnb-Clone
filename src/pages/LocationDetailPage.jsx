@@ -29,10 +29,13 @@ export default function LocationDetailPage(props) {
 
   const renderRoomList = (list) => {
     return (
-      <div className="room-list">
-        {list.map((room, index) => {
-          return <Room room={room} key={index} />;
-        })}
+      <div className="room-area">
+        <h3 style={{ fontWeight: "bold" }}>Danh sách phòng cho thuê ({list.length})</h3>
+        <div className="room-list">
+          {list.map((room, index) => {
+            return <Room room={room} key={index} />;
+          })}
+        </div>
       </div>
     );
   };
