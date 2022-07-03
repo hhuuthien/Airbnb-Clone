@@ -17,7 +17,7 @@ export default function Room(props) {
   room.indoorFireplace && furnitureList.push({ name: "Indoor fireplace", img: "/img/furniture/fireplace.png" });
 
   const renderFurniture = (list) => {
-    return list.slice(0, 5).map((item, index) => {
+    return list.map((item, index) => {
       return (
         <Tooltip title={item.name} key={index}>
           <img className="furniture" src={item.img} alt={item.name} />

@@ -68,6 +68,33 @@
           grid-template-columns: repeat(1, 1fr);
         }
       }
+
+      .no-result {
+        padding: 30px 0;
+        text-align: center;
+
+        img {
+          width: 45px;
+        }
+
+        .nr1 {
+          margin-top: 20px;
+          margin-bottom: 5px;
+          font-weight: bold;
+        }
+      }
+
+      .room-search {
+        display: flex;
+
+        button.btn-filter {
+          margin-left: 10px;
+
+          i {
+            margin-right: 8px;
+          }
+        }
+      }
     }
   }
 }

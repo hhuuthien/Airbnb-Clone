@@ -36,6 +36,20 @@
   }
 }
 
+.ant-drawer-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .cb {
+    margin-bottom: 12px;
+  }
+
+  .ant-checkbox-wrapper + .ant-checkbox-wrapper {
+    margin-left: 0;
+  }
+}
+
 @import "./components/header-home.scss";
 @import "./components/location.scss";
 @import "./components/room.scss";
