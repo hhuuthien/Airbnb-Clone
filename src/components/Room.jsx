@@ -27,16 +27,13 @@ export default function Room(props) {
   };
 
   return (
-    <div className="room-card">
+    <div className="room-card" onClick={() => props.history.push("/r/" + room._id)}>
       <div className="card-image">
         <LazyLoadImage alt={room.name} src={room.image} />
       </div>
       <div className="card-info">
         <div className="card-name">{room.name}</div>
-        <div className="card-price">
-          <i className="fa-solid fa-dollar-sign" style={{ marginRight: 4 }}></i>
-          {room.price.toLocaleString()} VNĐ
-        </div>
+        <div className="card-price">{room.price.toLocaleString()} VNĐ</div>
         <div className="card-furniture">{renderFurniture(furnitureList)}</div>
         <div className="card-room">
           {room.bedRoom} phòng ngủ, {room.bath} phòng tắm

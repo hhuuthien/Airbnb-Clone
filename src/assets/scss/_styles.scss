@@ -50,6 +50,10 @@
   }
 }
 
+.ant-comment-inner {
+  padding: 12px 0;
+}
+
 @import "./components/header-home.scss";
 @import "./components/location.scss";
 @import "./components/room.scss";
@@ -65,3 +69,4 @@
 @import "./pages/admin-user-page.scss";
 @import "./pages/admin-user-detail-page.scss";
 @import "./pages/location-detail-page.scss";
+@import "./pages/room-detail-page.scss";

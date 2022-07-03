@@ -1,8 +1,10 @@
-import { GET_ROOM_BY_LOCATION, UPDATE_ROOM_LIST_BY_SEARCHING_AND_FILTERING } from "../const/constant";
+import { CLEAR_ROOM_DETAIL, GET_REVIEW_BY_ROOM, GET_ROOM_BY_LOCATION, GET_ROOM_DETAIL, UPDATE_ROOM_LIST_BY_SEARCHING_AND_FILTERING } from "../const/constant";
 
 const defaultState = {
   roomList: [],
   roomListCopy: [],
+  roomDetail: {},
+  roomReview: [],
 };
 
 export const roomReducer = (state = defaultState, action) => {
@@ -18,6 +20,24 @@ export const roomReducer = (state = defaultState, action) => {
       return {
         ...state,
         roomList: action.data,
+      };
+    }
+    case GET_ROOM_DETAIL: {
+      return {
+        ...state,
+        roomDetail: action.data,
+      };
+    }
+    case CLEAR_ROOM_DETAIL: {
+      return {
+        ...state,
+        roomDetail: {},
+      };
+    }
+    case GET_REVIEW_BY_ROOM: {
+      return {
+        ...state,
+        roomReview: action.data,
       };
     }
     default:

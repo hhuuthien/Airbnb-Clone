@@ -154,7 +154,7 @@ export default function LocationDetailPage(props) {
       return (
         <div className="room-list">
           {roomList.map((room, index) => {
-            return <Room room={room} key={index} />;
+            return <Room room={room} key={index} history={props.history} />;
           })}
         </div>
       );
