@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { getLocationAPI } from "../redux/actions/locationAction";
-import { getRoomDetail, updateRoom } from "../redux/actions/roomAction";
+import { getRoomDetail, updateRoom, uploadImageRoom } from "../redux/actions/roomAction";
 import { CLEAR_ROOM_DETAIL, UPDATE_ROOM_END } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 const { Option } = Select;
@@ -16,6 +16,8 @@ export default function AdminRoomDetailPage(props) {
   const { user } = useSelector((state) => state.accountReducer);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+
   const [location, setLocation] = useState("");
 
   const [furnitureStatus, setFurnitureStatus] = useState([false, false, false, false, false, false, false, false, false, false]);
@@ -117,6 +119,16 @@ export default function AdminRoomDetailPage(props) {
     ]);
   };
 
+  const showModal2 = () => {
+    setModalVisible2(true);
+  };
+
+  const uploadImage = (id) => {
+    setModalVisible2(false);
+    const file = document.getElementById(`file-${id}`).files[0];
+    dispatch(uploadImageRoom(id, file));
+  };
+
   // Nếu chưa đăng nhập hoặc đã đăng nhập nhưng không phải tài khoản admin --> redirect
   if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
     return <Redirect to="/admin" />;
@@ -133,10 +145,10 @@ export default function AdminRoomDetailPage(props) {
                   <Button type="primary" onClick={showModal}>
                     Cập nhật thông tin
                   </Button>
-                  {/* <Button type="primary" onClick={showModal2} style={{ marginLeft: 5 }}>
+                  <Button type="primary" onClick={showModal2} style={{ marginLeft: 5 }}>
                     Cập nhật hình ảnh
                   </Button>
-                  <Button type="primary" danger onClick={() => confirmToDelete(locationDetail.name, lid)} style={{ marginLeft: 5 }}>
+                  {/* <Button type="primary" danger onClick={() => confirmToDelete(locationDetail.name, lid)} style={{ marginLeft: 5 }}>
                     Xoá
                   </Button> */}
                 </div>
@@ -234,6 +246,9 @@ export default function AdminRoomDetailPage(props) {
                 Wifi
               </Checkbox>
             </div>
+          </Modal>
+          <Modal title="Cập nhật hình ảnh phòng cho thuê" centered visible={modalVisible2} okText="Cập nhật" onOk={() => uploadImage(rid)} onCancel={() => setModalVisible2(false)}>
+            <input type="file" name="file" id={`file-${rid}`} accept="image/*" />
           </Modal>
         </>
       );

@@ -1,5 +1,13 @@
 import { http } from "../../util/setting";
-import { GET_REVIEW_BY_ROOM, GET_ROOM_BY_LOCATION, GET_ROOM_DETAIL, UPDATE_ROOM_FAIL, UPDATE_ROOM_SUCCESS } from "../const/constant";
+import {
+  GET_REVIEW_BY_ROOM,
+  GET_ROOM_BY_LOCATION,
+  GET_ROOM_DETAIL,
+  UPDATE_ROOM_FAIL,
+  UPDATE_ROOM_SUCCESS,
+  UPLOAD_IMAGE_ROOM_FAIL,
+  UPLOAD_IMAGE_ROOM_SUCCESS,
+} from "../const/constant";
 
 export const getRoomByLocationAPI = (locationId) => {
   return async (dispatch) => {
@@ -60,6 +68,25 @@ export const updateRoom = (id, info, locationNew) => {
     } catch (error) {
       dispatch({
         type: UPDATE_ROOM_FAIL,
+      });
+    }
+  };
+};
+
+export const uploadImageRoom = (id, image) => {
+  return async (dispatch) => {
+    try {
+      let formData = new FormData();
+      formData.append("room", image);
+      let result = await http.post("/api/rooms/upload-image/" + id, formData);
+
+      dispatch({
+        type: UPLOAD_IMAGE_ROOM_SUCCESS,
+        data: result.data.image,
+      });
+    } catch (error) {
+      dispatch({
+        type: UPLOAD_IMAGE_ROOM_FAIL,
       });
     }
   };
