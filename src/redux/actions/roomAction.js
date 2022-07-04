@@ -1,5 +1,7 @@
 import { http } from "../../util/setting";
 import {
+  DELETE_ROOM_FAIL,
+  DELETE_ROOM_SUCCESS,
   GET_REVIEW_BY_ROOM,
   GET_ROOM_BY_LOCATION,
   GET_ROOM_DETAIL,
@@ -87,6 +89,22 @@ export const uploadImageRoom = (id, image) => {
     } catch (error) {
       dispatch({
         type: UPLOAD_IMAGE_ROOM_FAIL,
+      });
+    }
+  };
+};
+
+export const deleteRoom = (id) => {
+  return async (dispatch) => {
+    try {
+      let result = await http.delete("/api/rooms/" + id);
+      dispatch({
+        type: DELETE_ROOM_SUCCESS,
+        data: result.data._id,
+      });
+    } catch (error) {
+      dispatch({
+        type: DELETE_ROOM_FAIL,
       });
     }
   };

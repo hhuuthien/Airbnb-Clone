@@ -1,17 +1,18 @@
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Descriptions, Image, Input, message, Modal, Select } from "antd";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { getLocationAPI } from "../redux/actions/locationAction";
-import { getRoomDetail, updateRoom, uploadImageRoom } from "../redux/actions/roomAction";
-import { CLEAR_ROOM_DETAIL, UPDATE_ROOM_END } from "../redux/const/constant";
+import { deleteRoom, getRoomDetail, updateRoom, uploadImageRoom } from "../redux/actions/roomAction";
+import { CLEAR_ROOM_DETAIL, DELETE_ROOM_END, UPDATE_ROOM_END } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 const { Option } = Select;
 
 export default function AdminRoomDetailPage(props) {
   const dispatch = useDispatch();
-  const { roomDetail, updateStatus } = useSelector((root) => root.roomReducer);
+  const { roomDetail, updateStatus, deleteStatus } = useSelector((root) => root.roomReducer);
   const { locationList } = useSelector((root) => root.locationReducer);
   const { user } = useSelector((state) => state.accountReducer);
 
@@ -46,6 +47,21 @@ export default function AdminRoomDetailPage(props) {
       });
     }
   }, [updateStatus]);
+
+  useEffect(() => {
+    if (deleteStatus === "success") {
+      message.success("Xoá thành công");
+      dispatch({
+        type: DELETE_ROOM_END,
+      });
+      props.history.goBack();
+    } else if (deleteStatus === "fail") {
+      message.error("Xoá không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: DELETE_ROOM_END,
+      });
+    }
+  }, [deleteStatus]);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -129,6 +145,19 @@ export default function AdminRoomDetailPage(props) {
     dispatch(uploadImageRoom(id, file));
   };
 
+  const confirmToDelete = (name, id) => {
+    Modal.confirm({
+      title: "Xoá phòng",
+      icon: <QuestionCircleOutlined />,
+      content: `Bạn có muốn xoá phòng "${name}" không?`,
+      okText: "Xoá",
+      cancelText: "Cancel",
+      onOk() {
+        dispatch(deleteRoom(id));
+      },
+    });
+  };
+
   // Nếu chưa đăng nhập hoặc đã đăng nhập nhưng không phải tài khoản admin --> redirect
   if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
     return <Redirect to="/admin" />;
@@ -148,9 +177,9 @@ export default function AdminRoomDetailPage(props) {
                   <Button type="primary" onClick={showModal2} style={{ marginLeft: 5 }}>
                     Cập nhật hình ảnh
                   </Button>
-                  {/* <Button type="primary" danger onClick={() => confirmToDelete(locationDetail.name, lid)} style={{ marginLeft: 5 }}>
+                  <Button type="primary" danger onClick={() => confirmToDelete(roomDetail.name, rid)} style={{ marginLeft: 5 }}>
                     Xoá
-                  </Button> */}
+                  </Button>
                 </div>
                 <Descriptions bordered column={1}>
                   <Descriptions.Item label="ID">{roomDetail._id}</Descriptions.Item>
