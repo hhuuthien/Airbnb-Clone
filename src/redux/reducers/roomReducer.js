@@ -1,4 +1,4 @@
-import { CLEAR_ROOM_DETAIL, GET_REVIEW_BY_ROOM, GET_ROOM_BY_LOCATION, GET_ROOM_DETAIL, UPDATE_ROOM_LIST_BY_SEARCHING_AND_FILTERING } from "../const/constant";
+import { CLEAR_ROOM_DETAIL, CLEAR_ROOM_LIST, GET_REVIEW_BY_ROOM, GET_ROOM_BY_LOCATION, GET_ROOM_DETAIL, UPDATE_ROOM_LIST_BY_SEARCHING_AND_FILTERING } from "../const/constant";
 
 const defaultState = {
   roomList: [],
@@ -38,6 +38,13 @@ export const roomReducer = (state = defaultState, action) => {
       return {
         ...state,
         roomReview: action.data,
+      };
+    }
+    case CLEAR_ROOM_LIST: {
+      return {
+        ...state,
+        roomList: [],
+        roomListCopy: [],
       };
     }
     default:
