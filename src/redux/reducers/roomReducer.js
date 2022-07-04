@@ -1,10 +1,21 @@
-import { CLEAR_ROOM_DETAIL, CLEAR_ROOM_LIST, GET_REVIEW_BY_ROOM, GET_ROOM_BY_LOCATION, GET_ROOM_DETAIL, UPDATE_ROOM_LIST_BY_SEARCHING_AND_FILTERING } from "../const/constant";
+import {
+  CLEAR_ROOM_DETAIL,
+  CLEAR_ROOM_LIST,
+  GET_REVIEW_BY_ROOM,
+  GET_ROOM_BY_LOCATION,
+  GET_ROOM_DETAIL,
+  UPDATE_ROOM_END,
+  UPDATE_ROOM_FAIL,
+  UPDATE_ROOM_LIST_BY_SEARCHING_AND_FILTERING,
+  UPDATE_ROOM_SUCCESS,
+} from "../const/constant";
 
 const defaultState = {
   roomList: [],
   roomListCopy: [],
   roomDetail: {},
   roomReview: [],
+  updateStatus: "",
 };
 
 export const roomReducer = (state = defaultState, action) => {
@@ -45,6 +56,25 @@ export const roomReducer = (state = defaultState, action) => {
         ...state,
         roomList: [],
         roomListCopy: [],
+      };
+    }
+    case UPDATE_ROOM_SUCCESS: {
+      return {
+        ...state,
+        roomDetail: action.data,
+        updateStatus: "success",
+      };
+    }
+    case UPDATE_ROOM_FAIL: {
+      return {
+        ...state,
+        updateStatus: "fail",
+      };
+    }
+    case UPDATE_ROOM_END: {
+      return {
+        ...state,
+        updateStatus: "",
       };
     }
     default:

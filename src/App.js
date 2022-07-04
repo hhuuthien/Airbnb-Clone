@@ -16,6 +16,7 @@ import AdminUserDetailPage from "./pages/AdminUserDetailPage";
 import LocationDetailPage from "./pages/LocationDetailPage";
 import RoomDetailPage from "./pages/RoomDetailPage";
 import AdminRoomPage from "./pages/AdminRoomPage";
+import AdminRoomDetailPage from "./pages/AdminRoomDetailPage";
 
 // templates
 import HeaderTemplate from "./templates/HeaderTemplate";
@@ -35,6 +36,7 @@ function App() {
         <HeaderTemplate path="/l/:lid" component={LocationDetailPage} />
         <HeaderTemplate path="/r/:rid" component={RoomDetailPage} />
         <HeaderTemplate path="/manage_room" component={AdminRoomPage} />
+        <HeaderTemplate path="/room/:rid" component={AdminRoomDetailPage} />
         <HeaderTemplate path="/" component={HomePage} />
       </Switch>
     </BrowserRouter>

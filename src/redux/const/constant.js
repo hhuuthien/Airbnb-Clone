@@ -61,3 +61,8 @@ export const GET_ROOM_DETAIL = "GET_ROOM_DETAIL";
 export const CLEAR_ROOM_DETAIL = "CLEAR_ROOM_DETAIL";
 export const CLEAR_ROOM_LIST = "CLEAR_ROOM_LIST";
 export const GET_REVIEW_BY_ROOM = "GET_REVIEW_BY_ROOM";
+
+// update room
+export const UPDATE_ROOM_SUCCESS = "UPDATE_ROOM_SUCCESS";
+export const UPDATE_ROOM_FAIL = "UPDATE_ROOM_FAIL";
+export const UPDATE_ROOM_END = "UPDATE_ROOM_END";

@@ -6,7 +6,7 @@ import { getRoomByLocationAPI } from "../redux/actions/roomAction";
 import { CLEAR_ROOM_LIST } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
-export default function AdminRoomPage() {
+export default function AdminRoomPage(props) {
   const dispatch = useDispatch();
   const { roomList } = useSelector((root) => root.roomReducer);
   const { user } = useSelector((state) => state.accountReducer);
@@ -55,7 +55,7 @@ export default function AdminRoomPage() {
           <Button
             type="primary"
             onClick={() => {
-              // props.history.push("/location/" + record._id);
+              props.history.push("/room/" + record._id);
             }}
           >
             Xem chi tiết
