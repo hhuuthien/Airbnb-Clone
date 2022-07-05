@@ -112,14 +112,30 @@ export const deleteRoom = (id) => {
   };
 };
 
-export const createRoom = (info, location) => {
+export const createRoom = (info, location, image) => {
   return async (dispatch) => {
     try {
       let result = await http.post("/api/rooms", info);
-      dispatch({
-        type: CREATE_ROOM_SUCCESS,
-        data: { ...result.data, locationId: location },
-      });
+
+      // Sau khi tạo thành công => có id => upload hình
+      let formData = new FormData();
+      formData.append("room", image);
+
+      try {
+        let result2 = await http.post("/api/rooms/upload-image/" + result.data._id, formData);
+
+        // tạo phòng thành công và có luôn hình
+        dispatch({
+          type: CREATE_ROOM_SUCCESS,
+          data: { ...result2.data, locationId: location },
+        });
+      } catch (error) {
+        // tạo vị trí thành công nhưng không có hình, cần upload hình sau
+        dispatch({
+          type: CREATE_ROOM_SUCCESS,
+          data: { ...result.data, locationId: location },
+        });
+      }
     } catch (error) {
       dispatch({
         type: CREATE_ROOM_FAIL,

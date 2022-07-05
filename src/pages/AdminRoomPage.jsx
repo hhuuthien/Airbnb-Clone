@@ -78,7 +78,10 @@ export default function AdminRoomPage(props) {
       furnitureStatus[7] ? (fullValues = { ...fullValues, kitchen: true }) : (fullValues = { ...fullValues, kitchen: false });
       furnitureStatus[8] ? (fullValues = { ...fullValues, pool: true }) : (fullValues = { ...fullValues, pool: false });
       furnitureStatus[9] ? (fullValues = { ...fullValues, wifi: true }) : (fullValues = { ...fullValues, wifi: false });
-      dispatch(createRoom(fullValues, locationOfThisRoom));
+
+      // lấy hình ảnh
+      const fileImage = document.getElementById("createRoomModal-image").files[0];
+      dispatch(createRoom(fullValues, locationOfThisRoom, fileImage));
     },
   });
 
@@ -232,6 +235,11 @@ export default function AdminRoomPage(props) {
               <Checkbox id="cb9" onChange={handleChangeCheckbox} defaultChecked={furnitureStatus[9]}>
                 Wifi
               </Checkbox>
+            </div>
+            <div className="createRoomModal-image">
+              <label>Hình ảnh</label>
+              <br />
+              <input type="file" name="file" id="createRoomModal-image" accept="image/*" />
             </div>
           </Modal>
         </>
