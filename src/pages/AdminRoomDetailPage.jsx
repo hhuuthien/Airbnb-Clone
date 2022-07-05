@@ -244,6 +244,7 @@ export default function AdminRoomDetailPage(props) {
             </div>
             <div className="updateRoomModal-furniture">
               <label>Tiện ích</label>
+              <br />
               <Checkbox id="cb0" onChange={handleChangeCheckbox} defaultChecked={furnitureStatus[0]}>
                 TV
               </Checkbox>

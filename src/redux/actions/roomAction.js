@@ -1,5 +1,7 @@
 import { http } from "../../util/setting";
 import {
+  CREATE_ROOM_FAIL,
+  CREATE_ROOM_SUCCESS,
   DELETE_ROOM_FAIL,
   DELETE_ROOM_SUCCESS,
   GET_REVIEW_BY_ROOM,
@@ -105,6 +107,22 @@ export const deleteRoom = (id) => {
     } catch (error) {
       dispatch({
         type: DELETE_ROOM_FAIL,
+      });
+    }
+  };
+};
+
+export const createRoom = (info, location) => {
+  return async (dispatch) => {
+    try {
+      let result = await http.post("/api/rooms", info);
+      dispatch({
+        type: CREATE_ROOM_SUCCESS,
+        data: { ...result.data, locationId: location },
+      });
+    } catch (error) {
+      dispatch({
+        type: CREATE_ROOM_FAIL,
       });
     }
   };

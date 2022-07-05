@@ -1,6 +1,9 @@
 import {
   CLEAR_ROOM_DETAIL,
   CLEAR_ROOM_LIST,
+  CREATE_ROOM_END,
+  CREATE_ROOM_FAIL,
+  CREATE_ROOM_SUCCESS,
   DELETE_ROOM_END,
   DELETE_ROOM_FAIL,
   DELETE_ROOM_SUCCESS,
@@ -23,6 +26,7 @@ const defaultState = {
   roomReview: [],
   updateStatus: "",
   deleteStatus: "",
+  createStatus: "",
 };
 
 export const roomReducer = (state = defaultState, action) => {
@@ -120,6 +124,26 @@ export const roomReducer = (state = defaultState, action) => {
       return {
         ...state,
         deleteStatus: "",
+      };
+    }
+    case CREATE_ROOM_SUCCESS: {
+      return {
+        ...state,
+        roomList: [...state.roomList, action.data],
+        roomListCopy: [...state.roomListCopy, action.data],
+        createStatus: "success",
+      };
+    }
+    case CREATE_ROOM_FAIL: {
+      return {
+        ...state,
+        createStatus: "fail",
+      };
+    }
+    case CREATE_ROOM_END: {
+      return {
+        ...state,
+        createStatus: "",
       };
     }
     default:

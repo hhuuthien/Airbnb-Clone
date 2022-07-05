@@ -31,7 +31,14 @@
   .createUser-phone,
   .createUser-birthday,
   .createUser-gender,
-  .createUser-type {
+  .createUser-type,
+  .updateRoomModal-name,
+  .updateRoomModal-location,
+  .updateRoomModal-description,
+  .updateRoomModal-price,
+  .updateRoomModal-guests,
+  .updateRoomModal-bedRoom,
+  .updateRoomModal-bath {
     margin-bottom: 18px;
   }
 }
@@ -52,6 +59,10 @@
 
 .ant-comment-inner {
   padding: 12px 0;
+}
+
+.ant-checkbox-wrapper + .ant-checkbox-wrapper {
+  margin-left: 0;
 }
 
 @import "./components/header-home.scss";
