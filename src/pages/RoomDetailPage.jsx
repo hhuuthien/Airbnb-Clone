@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createReview } from "../redux/actions/reviewAction";
 import { getRoomDetail, getRoomReview } from "../redux/actions/roomAction";
 import { CLEAR_ROOM_DETAIL, CREATE_REVIEW_END } from "../redux/const/constant";
+import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 const { TextArea } = Input;
 
@@ -118,6 +119,20 @@ export default function RoomDetailPage(props) {
     },
   });
 
+  const renderReviewArea = () => {
+    if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
+      return <div style={{ marginBottom: 30 }}>Bạn cần đăng nhập tài khoản để gửi đánh giá</div>;
+    }
+    return (
+      <>
+        <TextArea rows={3} placeholder="Chia sẻ đánh giá hoặc ý kiến của bạn..." name="review" value={formik.values.review} onChange={formik.handleChange} />
+        <Button type="primary" style={{ marginTop: 10, marginBottom: 30 }} onClick={formik.handleSubmit}>
+          Gửi đánh giá
+        </Button>
+      </>
+    );
+  };
+
   if (!roomDetail.name) return <></>;
   return (
     <div className="room-detail-page">
@@ -149,10 +164,7 @@ export default function RoomDetailPage(props) {
           <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Tiện ích</h3>
           <div className="furniture">{renderFurniture(furnitureList)}</div>
           <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Đánh giá</h3>
-          <TextArea rows={3} placeholder="Chia sẻ đánh giá hoặc ý kiến của bạn..." name="review" value={formik.values.review} onChange={formik.handleChange} />
-          <Button type="primary" style={{ marginTop: 10, marginBottom: 30 }} onClick={formik.handleSubmit}>
-            Gửi đánh giá
-          </Button>
+          {renderReviewArea()}
           {renderReview()}
         </div>
       </div>
