@@ -7,7 +7,6 @@ import {
   DELETE_ROOM_END,
   DELETE_ROOM_FAIL,
   DELETE_ROOM_SUCCESS,
-  GET_REVIEW_BY_ROOM,
   GET_ROOM_BY_LOCATION,
   GET_ROOM_DETAIL,
   UPDATE_ROOM_END,
@@ -23,7 +22,6 @@ const defaultState = {
   roomList: [],
   roomListCopy: [],
   roomDetail: {},
-  roomReview: [],
   updateStatus: "",
   deleteStatus: "",
   createStatus: "",
@@ -54,12 +52,6 @@ export const roomReducer = (state = defaultState, action) => {
       return {
         ...state,
         roomDetail: {},
-      };
-    }
-    case GET_REVIEW_BY_ROOM: {
-      return {
-        ...state,
-        roomReview: action.data,
       };
     }
     case CLEAR_ROOM_LIST: {

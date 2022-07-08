@@ -1,15 +1,17 @@
-import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import reduxThunk from "redux-thunk";
-import { locationReducer } from "./reducers/locationReducer";
 import { accountReducer } from "./reducers/accountReducer";
-import { userReducer } from "./reducers/userReducer";
+import { locationReducer } from "./reducers/locationReducer";
+import { reviewReducer } from "./reducers/reviewReducer";
 import { roomReducer } from "./reducers/roomReducer";
+import { userReducer } from "./reducers/userReducer";
 
 const rootReducer = combineReducers({
   locationReducer,
   accountReducer,
   userReducer,
   roomReducer,
+  reviewReducer,
 });
 
 const middleWare = applyMiddleware(reduxThunk);

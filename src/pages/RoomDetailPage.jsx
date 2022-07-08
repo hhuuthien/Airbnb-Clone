@@ -1,15 +1,19 @@
 import { HomeOutlined } from "@ant-design/icons";
-import { Breadcrumb, Button, Image, Comment, Avatar } from "antd";
+import { Avatar, Breadcrumb, Button, Comment, Image, Input, message } from "antd";
+import { useFormik } from "formik";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { createReview } from "../redux/actions/reviewAction";
 import { getRoomDetail, getRoomReview } from "../redux/actions/roomAction";
-import { CLEAR_ROOM_DETAIL } from "../redux/const/constant";
+import { CLEAR_ROOM_DETAIL, CREATE_REVIEW_END } from "../redux/const/constant";
+
+const { TextArea } = Input;
 
 export default function RoomDetailPage(props) {
-  const { roomDetail, roomReview } = useSelector((root) => root.roomReducer);
+  const { roomDetail } = useSelector((root) => root.roomReducer);
+  const { reviewList, createReviewStatus } = useSelector((root) => root.reviewReducer);
+  const { user } = useSelector((root) => root.accountReducer);
   const dispatch = useDispatch();
-
-  console.log(roomReview);
 
   const rid = props.match.params.rid;
 
@@ -22,6 +26,20 @@ export default function RoomDetailPage(props) {
       });
     };
   }, []);
+
+  useEffect(() => {
+    if (createReviewStatus === "success") {
+      message.success("Gửi đánh giá thành công");
+      dispatch({
+        type: CREATE_REVIEW_END,
+      });
+    } else if (createReviewStatus === "fail") {
+      message.error("Gửi đánh giá không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: CREATE_REVIEW_END,
+      });
+    }
+  }, [createReviewStatus]);
 
   let furnitureList = []; // gom hết tiện ích vô mảng này, chuyển thành obj có tên và hình ảnh
   roomDetail.wifi && furnitureList.push({ name: "Wifi", img: "/img/furniture/wifi.png" });
@@ -61,7 +79,7 @@ export default function RoomDetailPage(props) {
   };
 
   const renderReview = () => {
-    return roomReview.map((item) => {
+    return reviewList.map((item, index) => {
       const dateString = item.updatedAt;
       const timeStamp = Date.parse(dateString);
       const dateObject = new Date(timeStamp);
@@ -70,7 +88,7 @@ export default function RoomDetailPage(props) {
       const year = dateObject.getFullYear();
 
       return (
-        <div className="review-item">
+        <div className="review-item" key={index}>
           <Comment
             author={item.userId === null ? "Người dùng ẩn danh" : item.userId.name}
             avatar={item.userId === null ? <Avatar src="/img/user-blank.png" /> : <Avatar src={item.userId.avatar} />}
@@ -81,6 +99,24 @@ export default function RoomDetailPage(props) {
       );
     });
   };
+
+  const formik = useFormik({
+    initialValues: {
+      review: "",
+    },
+    onSubmit: (values) => {
+      formik.handleReset();
+      dispatch(
+        createReview(
+          rid,
+          {
+            content: values.review,
+          },
+          user
+        )
+      );
+    },
+  });
 
   if (!roomDetail.name) return <></>;
   return (
@@ -113,6 +149,10 @@ export default function RoomDetailPage(props) {
           <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Tiện ích</h3>
           <div className="furniture">{renderFurniture(furnitureList)}</div>
           <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Đánh giá</h3>
+          <TextArea rows={3} placeholder="Chia sẻ đánh giá hoặc ý kiến của bạn..." name="review" value={formik.values.review} onChange={formik.handleChange} />
+          <Button type="primary" style={{ marginTop: 10, marginBottom: 30 }} onClick={formik.handleSubmit}>
+            Gửi đánh giá
+          </Button>
           {renderReview()}
         </div>
       </div>
