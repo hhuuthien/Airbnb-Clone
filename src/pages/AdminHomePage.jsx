@@ -80,6 +80,10 @@ export default function AdminHomePage(props) {
             <Button type="primary" onClick={() => props.history.push("/manage_room")} style={{ width: 200, marginBottom: 10 }}>
               Quản lý phòng cho thuê
             </Button>
+            <br />
+            <Button type="primary" onClick={() => props.history.push("/manage_room")} style={{ width: 200, marginBottom: 10 }}>
+              Quản lý đánh giá
+            </Button>
           </div>
         );
       }

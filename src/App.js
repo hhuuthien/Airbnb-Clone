@@ -4,19 +4,19 @@ import "./App.css";
 import { BrowserRouter, Switch } from "react-router-dom";
 
 // pages
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
 import AccountPage from "./pages/AccountPage";
 import AdminHomePage from "./pages/AdminHomePage";
-import AdminLocationPage from "./pages/AdminLocationPage";
 import AdminLocationDetailPage from "./pages/AdminLocationDetailPage";
-import AdminUserPage from "./pages/AdminUserPage";
-import AdminUserDetailPage from "./pages/AdminUserDetailPage";
-import LocationDetailPage from "./pages/LocationDetailPage";
-import RoomDetailPage from "./pages/RoomDetailPage";
-import AdminRoomPage from "./pages/AdminRoomPage";
+import AdminLocationPage from "./pages/AdminLocationPage";
 import AdminRoomDetailPage from "./pages/AdminRoomDetailPage";
+import AdminRoomPage from "./pages/AdminRoomPage";
+import AdminUserDetailPage from "./pages/AdminUserDetailPage";
+import AdminUserPage from "./pages/AdminUserPage";
+import HomePage from "./pages/HomePage";
+import LocationDetailPage from "./pages/LocationDetailPage";
+import LoginPage from "./pages/LoginPage";
+import RoomDetailPage from "./pages/RoomDetailPage";
+import SignupPage from "./pages/SignupPage";
 
 // templates
 import HeaderTemplate from "./templates/HeaderTemplate";
