@@ -47,20 +47,6 @@ export const getRoomDetail = (id) => {
   };
 };
 
-export const getRoomReview = (roomID) => {
-  return async (dispatch) => {
-    try {
-      let result = await http.get("/api/reviews/byRoom?roomId=" + roomID);
-      dispatch({
-        type: GET_REVIEW_BY_ROOM,
-        data: result.data,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-};
-
 export const updateRoom = (id, info, locationNew) => {
   return async (dispatch) => {
     try {

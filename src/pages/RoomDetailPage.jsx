@@ -1,12 +1,13 @@
-import { HomeOutlined } from "@ant-design/icons";
-import { Avatar, Breadcrumb, Button, Comment, Image, Input, message } from "antd";
+import { DeleteOutlined, EditOutlined, HomeOutlined } from "@ant-design/icons";
+import { Avatar, Breadcrumb, Button, Comment, Image, Input, message, Modal } from "antd";
 import { useFormik } from "formik";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createReview } from "../redux/actions/reviewAction";
-import { getRoomDetail, getRoomReview } from "../redux/actions/roomAction";
+import { createReview, editReview, getReview } from "../redux/actions/reviewAction";
+import { getRoomDetail } from "../redux/actions/roomAction";
 import { CLEAR_ROOM_DETAIL, CREATE_REVIEW_END } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
@@ -16,11 +17,13 @@ export default function RoomDetailPage(props) {
   const { user } = useSelector((root) => root.accountReducer);
   const dispatch = useDispatch();
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   const rid = props.match.params.rid;
 
   useEffect(() => {
     dispatch(getRoomDetail(rid));
-    dispatch(getRoomReview(rid));
+    dispatch(getReview(rid));
     return () => {
       dispatch({
         type: CLEAR_ROOM_DETAIL,
@@ -79,6 +82,48 @@ export default function RoomDetailPage(props) {
     );
   };
 
+  const formik2 = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      id: "",
+      content: "",
+    },
+    onSubmit: (values) => {
+      setModalVisible(false);
+      formik.handleReset();
+      // dispatch(editReview(values.id, values.content));
+      //
+      // Tính năng này tạm thời không hoạt động
+      // Người dùng bình thường không thể chỉnh sửa đánh giá của mình
+      // Do API yêu cầu token admin
+      window.alert("Tính năng này tạm thời không hoạt động. Xem console log để biết thêm chi tiết.");
+      console.log("Người dùng (client) không thể chỉnh sửa đánh giá của mình do API yêu cầu phải có token admin.");
+    },
+  });
+
+  const onDeleteReview = (id, content) => {
+    Modal.confirm({
+      title: "Xoá đánh giá",
+      icon: <QuestionCircleOutlined />,
+      content: `Bạn có muốn xoá đánh giá này không?`,
+      okText: "Xoá",
+      cancelText: "Cancel",
+      onOk: () => {
+        // Tính năng này tạm thời không hoạt động
+        // Người dùng bình thường không thể xoá đánh giá của mình
+        // Do API yêu cầu token admin
+        window.alert("Tính năng này tạm thời không hoạt động. Xem console log để biết thêm chi tiết.");
+        console.log("Người dùng (client) không thể xoá đánh giá của mình do API yêu cầu phải có token admin.");
+      },
+    });
+  };
+
+  const onEditReview = (id, content) => {
+    setModalVisible(true);
+    formik2.setFieldValue("content", content);
+    formik2.setFieldValue("id", id);
+  };
+
   const renderReview = () => {
     return reviewList.map((item, index) => {
       const dateString = item.updatedAt;
@@ -90,12 +135,22 @@ export default function RoomDetailPage(props) {
 
       return (
         <div className="review-item" key={index}>
-          <Comment
-            author={item.userId === null ? "Người dùng ẩn danh" : item.userId.name}
-            avatar={item.userId === null ? <Avatar src="/img/user-blank.png" /> : <Avatar src={item.userId.avatar} />}
-            content={<p>{item.content}</p>}
-            datetime={day + "/" + month + "/" + year}
-          />
+          {item.userId && item.userId._id === user._id ? (
+            <Comment
+              actions={[<DeleteOutlined onClick={() => onDeleteReview(item._id, item.content)} />, <EditOutlined onClick={() => onEditReview(item._id, item.content)} />]}
+              author={item.userId === null ? "Người dùng ẩn danh" : item.userId.name}
+              avatar={item.userId === null ? <Avatar src="/img/user-blank.png" /> : <Avatar src={item.userId.avatar} />}
+              content={<p>{item.content}</p>}
+              datetime={day + "/" + month + "/" + year}
+            />
+          ) : (
+            <Comment
+              author={item.userId === null ? "Người dùng ẩn danh" : item.userId.name}
+              avatar={item.userId === null ? <Avatar src="/img/user-blank.png" /> : <Avatar src={item.userId.avatar} />}
+              content={<p>{item.content}</p>}
+              datetime={day + "/" + month + "/" + year}
+            />
+          )}
         </div>
       );
     });
@@ -135,39 +190,46 @@ export default function RoomDetailPage(props) {
 
   if (!roomDetail.name) return <></>;
   return (
-    <div className="room-detail-page">
-      <div className="container">
-        <div className="content">
-          {renderBreadcrumb()}
-          <div className="image">
-            <Image width="100%" height={300} src={roomDetail.image} fallback={"/img/fallback.png"} preview={false} />
-          </div>
-          <div className="info-action">
-            <div className="info">
-              <div className="name">{roomDetail.name}</div>
-              <div className="location">
-                {roomDetail.locationId.name}, {roomDetail.locationId.province}, {roomDetail.locationId.country}
+    <>
+      <div className="room-detail-page">
+        <div className="container">
+          <div className="content">
+            {renderBreadcrumb()}
+            <div className="image">
+              <Image width="100%" height={300} src={roomDetail.image} fallback={"/img/fallback.png"} preview={false} />
+            </div>
+            <div className="info-action">
+              <div className="info">
+                <div className="name">{roomDetail.name}</div>
+                <div className="location">
+                  {roomDetail.locationId.name}, {roomDetail.locationId.province}, {roomDetail.locationId.country}
+                </div>
+              </div>
+              <div className="action">
+                <Button type="primary" shape="round">
+                  <i className="fa-solid fa-circle-plus" style={{ marginRight: 8 }}></i> Đặt phòng
+                </Button>
               </div>
             </div>
-            <div className="action">
-              <Button type="primary" shape="round">
-                <i className="fa-solid fa-circle-plus" style={{ marginRight: 8 }}></i> Đặt phòng
-              </Button>
+            <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Giá tiền</h3>
+            <div className="price">{roomDetail.price.toLocaleString()} VNĐ / ngày đêm</div>
+            <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Số người ở và số lượng phòng</h3>
+            <div className="data">
+              {roomDetail.guests} khách • {roomDetail.bedRoom} phòng ngủ • {roomDetail.bath} phòng tắm
             </div>
+            <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Tiện ích</h3>
+            <div className="furniture">{renderFurniture(furnitureList)}</div>
+            <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Đánh giá</h3>
+            {renderReviewArea()}
+            {renderReview()}
           </div>
-          <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Giá tiền</h3>
-          <div className="price">{roomDetail.price.toLocaleString()} VNĐ / ngày đêm</div>
-          <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Số người ở và số lượng phòng</h3>
-          <div className="data">
-            {roomDetail.guests} khách • {roomDetail.bedRoom} phòng ngủ • {roomDetail.bath} phòng tắm
-          </div>
-          <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Tiện ích</h3>
-          <div className="furniture">{renderFurniture(furnitureList)}</div>
-          <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Đánh giá</h3>
-          {renderReviewArea()}
-          {renderReview()}
         </div>
       </div>
-    </div>
+      <Modal title="Chỉnh sửa đánh giá" centered visible={modalVisible} okText="OK" onOk={formik2.handleSubmit} onCancel={() => setModalVisible(false)}>
+        <div className="updateReview-content">
+          <Input disabled value={formik2.values.content} onChange={formik2.handleChange} name="content" allowClear />
+        </div>
+      </Modal>
+    </>
   );
 }
