@@ -1,12 +1,14 @@
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Descriptions, Image, Input, message, Modal, Select } from "antd";
+import { DeleteOutlined, EditOutlined, HomeOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Descriptions, Image, Input, message, Modal, Select, Comment, Avatar } from "antd";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { getLocationAPI } from "../redux/actions/locationAction";
+import { deleteReview, editReview, getReview } from "../redux/actions/reviewAction";
 import { deleteRoom, getRoomDetail, updateRoom, uploadImageRoom } from "../redux/actions/roomAction";
-import { CLEAR_ROOM_DETAIL, DELETE_ROOM_END, UPDATE_ROOM_END } from "../redux/const/constant";
+import { CLEAR_REVIEW_LIST, CLEAR_ROOM_DETAIL, DELETE_REVIEW_END, DELETE_ROOM_END, UPDATE_ROOM_END } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 const { Option } = Select;
 
@@ -15,9 +17,11 @@ export default function AdminRoomDetailPage(props) {
   const { roomDetail, updateStatus, deleteStatus } = useSelector((root) => root.roomReducer);
   const { locationList } = useSelector((root) => root.locationReducer);
   const { user } = useSelector((state) => state.accountReducer);
+  const { reviewList, deleteReviewStatus } = useSelector((state) => state.reviewReducer);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
+  const [modalVisible3, setModalVisible3] = useState(false);
 
   const [location, setLocation] = useState("");
 
@@ -28,9 +32,11 @@ export default function AdminRoomDetailPage(props) {
   useEffect(() => {
     dispatch(getRoomDetail(rid));
     dispatch(getLocationAPI());
+    dispatch(getReview(rid));
 
     return () => {
       dispatch({ type: CLEAR_ROOM_DETAIL });
+      dispatch({ type: CLEAR_REVIEW_LIST });
     };
   }, []);
 
@@ -62,6 +68,20 @@ export default function AdminRoomDetailPage(props) {
       });
     }
   }, [deleteStatus]);
+
+  useEffect(() => {
+    if (deleteReviewStatus === "success") {
+      message.success("Xoá thành công");
+      dispatch({
+        type: DELETE_REVIEW_END,
+      });
+    } else if (deleteReviewStatus === "fail") {
+      message.error("Xoá không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: DELETE_REVIEW_END,
+      });
+    }
+  }, [deleteReviewStatus]);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -158,6 +178,38 @@ export default function AdminRoomDetailPage(props) {
     });
   };
 
+  const formik2 = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      id: "",
+      content: "",
+    },
+    onSubmit: (values) => {
+      setModalVisible3(false);
+      formik2.handleReset();
+      dispatch(editReview(values.id, values.content));
+    },
+  });
+
+  const onEditReview = (id, content) => {
+    setModalVisible3(true);
+    formik2.setFieldValue("content", content);
+    formik2.setFieldValue("id", id);
+  };
+
+  const onDeleteReview = (id) => {
+    Modal.confirm({
+      title: "Xoá đánh giá",
+      icon: <QuestionCircleOutlined />,
+      content: `Bạn có muốn xoá đánh giá này không?`,
+      okText: "Xoá",
+      cancelText: "Cancel",
+      onOk: () => {
+        dispatch(deleteReview(id));
+      },
+    });
+  };
+
   // Nếu chưa đăng nhập hoặc đã đăng nhập nhưng không phải tài khoản admin --> redirect
   if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
     return <Redirect to="/admin" />;
@@ -202,6 +254,28 @@ export default function AdminRoomDetailPage(props) {
                   <Descriptions.Item label="Wifi">{roomDetail.wifi ? "Có" : "Không"}</Descriptions.Item>
                   <Descriptions.Item label="Hình ảnh">
                     <Image width={150} src={roomDetail.image} fallback={"/img/airbnb-logo.png"} />
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Đánh giá">
+                    {reviewList.map((item, index) => {
+                      const dateString = item.updatedAt;
+                      const timeStamp = Date.parse(dateString);
+                      const dateObject = new Date(timeStamp);
+                      const day = dateObject.getDate();
+                      const month = dateObject.getMonth() + 1;
+                      const year = dateObject.getFullYear();
+
+                      return (
+                        <div key={index}>
+                          <Comment
+                            actions={[<EditOutlined onClick={() => onEditReview(item._id, item.content)} />, <DeleteOutlined onClick={() => onDeleteReview(item._id)} />]}
+                            author={item.userId === null ? "Người dùng ẩn danh" : item.userId.name}
+                            avatar={item.userId === null ? <Avatar src="/img/user-blank.png" /> : <Avatar src={item.userId.avatar} />}
+                            content={<p>{item.content}</p>}
+                            datetime={day + "/" + month + "/" + year}
+                          />
+                        </div>
+                      );
+                    })}
                   </Descriptions.Item>
                 </Descriptions>
               </div>
@@ -279,6 +353,11 @@ export default function AdminRoomDetailPage(props) {
           </Modal>
           <Modal title="Cập nhật hình ảnh phòng cho thuê" centered visible={modalVisible2} okText="Cập nhật" onOk={() => uploadImage(rid)} onCancel={() => setModalVisible2(false)}>
             <input type="file" name="file" id={`file-${rid}`} accept="image/*" />
+          </Modal>
+          <Modal title="Chỉnh sửa đánh giá" centered visible={modalVisible3} okText="OK" onOk={formik2.handleSubmit} onCancel={() => setModalVisible3(false)}>
+            <div className="updateReview-content">
+              <Input value={formik2.values.content} onChange={formik2.handleChange} name="content" allowClear />
+            </div>
           </Modal>
         </>
       );
