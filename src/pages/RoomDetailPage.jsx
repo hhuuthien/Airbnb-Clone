@@ -1,23 +1,28 @@
 import { DeleteOutlined, EditOutlined, HomeOutlined } from "@ant-design/icons";
-import { Avatar, Breadcrumb, Button, Comment, Image, Input, message, Modal } from "antd";
+import { Avatar, Breadcrumb, Button, Comment, Image, Input, message, Modal, DatePicker } from "antd";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createReview, editReview, getReview } from "../redux/actions/reviewAction";
 import { getRoomDetail } from "../redux/actions/roomAction";
-import { CLEAR_ROOM_DETAIL, CREATE_REVIEW_END } from "../redux/const/constant";
+import { createTicket } from "../redux/actions/ticketAction";
+import { CLEAR_ROOM_DETAIL, CREATE_REVIEW_END, CREATE_TICKET_END } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
+const { RangePicker } = DatePicker;
 
 export default function RoomDetailPage(props) {
   const { roomDetail } = useSelector((root) => root.roomReducer);
   const { reviewList, createReviewStatus } = useSelector((root) => root.reviewReducer);
+  const { createTicketStatus } = useSelector((root) => root.ticketReducer);
   const { user } = useSelector((root) => root.accountReducer);
   const dispatch = useDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+  const [timeRange, setTimeRange] = useState([]);
 
   const rid = props.match.params.rid;
 
@@ -44,6 +49,20 @@ export default function RoomDetailPage(props) {
       });
     }
   }, [createReviewStatus]);
+
+  useEffect(() => {
+    if (createTicketStatus === "success") {
+      message.success("Đặt phòng thành công");
+      dispatch({
+        type: CREATE_TICKET_END,
+      });
+    } else if (createTicketStatus === "fail") {
+      message.error("Đặt phòng không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: CREATE_TICKET_END,
+      });
+    }
+  }, [createTicketStatus]);
 
   let furnitureList = []; // gom hết tiện ích vô mảng này, chuyển thành obj có tên và hình ảnh
   roomDetail.wifi && furnitureList.push({ name: "Wifi", img: "/img/furniture/wifi.png" });
@@ -188,6 +207,25 @@ export default function RoomDetailPage(props) {
     );
   };
 
+  const renderBookingButton = () => {
+    if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
+      return <></>;
+    }
+
+    return (
+      <Button type="primary" shape="round" onClick={() => setModalVisible2(true)}>
+        <i className="fa-solid fa-circle-plus" style={{ marginRight: 8 }}></i> Đặt phòng
+      </Button>
+    );
+  };
+
+  const bookingRoom = () => {
+    const startTime = timeRange[0].seconds(0).milliseconds(0).toISOString();
+    const endTime = timeRange[1].seconds(0).milliseconds(0).toISOString();
+    dispatch(createTicket(startTime, endTime, user._id, rid));
+    setModalVisible2(false);
+  };
+
   if (!roomDetail.name) return <></>;
   return (
     <>
@@ -205,11 +243,7 @@ export default function RoomDetailPage(props) {
                   {roomDetail.locationId.name}, {roomDetail.locationId.province}, {roomDetail.locationId.country}
                 </div>
               </div>
-              <div className="action">
-                <Button type="primary" shape="round">
-                  <i className="fa-solid fa-circle-plus" style={{ marginRight: 8 }}></i> Đặt phòng
-                </Button>
-              </div>
+              <div className="action">{renderBookingButton()}</div>
             </div>
             <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Giá tiền</h3>
             <div className="price">{roomDetail.price.toLocaleString()} VNĐ / ngày đêm</div>
@@ -228,6 +262,11 @@ export default function RoomDetailPage(props) {
       <Modal title="Chỉnh sửa đánh giá" centered visible={modalVisible} okText="OK" onOk={formik2.handleSubmit} onCancel={() => setModalVisible(false)}>
         <div className="updateReview-content">
           <Input disabled value={formik2.values.content} onChange={formik2.handleChange} name="content" allowClear />
+        </div>
+      </Modal>
+      <Modal title="Thông tin đặt phòng" visible={modalVisible2} okText="OK" onOk={() => bookingRoom()} onCancel={() => setModalVisible2(false)}>
+        <div className="booking-time">
+          <RangePicker showTime format="DD/MM/YYYY HH:mm" style={{ width: "100%" }} onChange={(v) => setTimeRange(v)} />
         </div>
       </Modal>
     </>

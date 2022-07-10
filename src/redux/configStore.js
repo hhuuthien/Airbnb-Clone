@@ -4,6 +4,7 @@ import { accountReducer } from "./reducers/accountReducer";
 import { locationReducer } from "./reducers/locationReducer";
 import { reviewReducer } from "./reducers/reviewReducer";
 import { roomReducer } from "./reducers/roomReducer";
+import { ticketReducer } from "./reducers/ticketReducer";
 import { userReducer } from "./reducers/userReducer";
 
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   userReducer,
   roomReducer,
   reviewReducer,
+  ticketReducer,
 });
 
 const middleWare = applyMiddleware(reduxThunk);
