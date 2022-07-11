@@ -66,17 +66,19 @@ export default function RoomDetailPage(props) {
         type: BOOKING_ROOM_END,
       });
     }
+    if (localStorage.getItem(USER_LOGIN) && localStorage.getItem(ACCESS_TOKEN) && user.email) dispatch(getTicketByUserInRoom(user._id, rid));
   }, [bookingStatus]);
 
   const checkTicket = () => {
     // Kiểm tra xem user đang đăng nhập có đặt phòng này không, nếu có thì hiện tại có đang trong thời gian đặt phòng không
     if (userTicketInThisRoom.length !== 0) {
-      // user này đã đặt phòng này -> xét ticket cuối cùng
-      const lastTicket = userTicketInThisRoom[userTicketInThisRoom.length - 1];
-      const checkInTime = Date.parse(lastTicket.checkIn);
-      const checkOutTime = Date.parse(lastTicket.checkOut);
       const now = Date.now();
-      if (checkInTime < now && now < checkOutTime) {
+
+      // const historyTickets = userTicketInThisRoom.filter((ticket) => Date.parse(ticket.checkIn) < now && Date.parse(ticket.checkOut) < now);
+      const currentTickets = userTicketInThisRoom.filter((ticket) => Date.parse(ticket.checkIn) < now && Date.parse(ticket.checkOut) > now);
+      // const futureTickets = userTicketInThisRoom.filter((ticket) => Date.parse(ticket.checkIn) > now && Date.parse(ticket.checkOut) > now);
+
+      if (currentTickets.length !== 0) {
         return true;
       } else {
         return false;
