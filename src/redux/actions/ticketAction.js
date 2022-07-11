@@ -1,5 +1,5 @@
 import { http } from "../../util/setting";
-import { BOOKING_ROOM_FAIL, BOOKING_ROOM_SUCCESS, GET_TICKET_BY_USER } from "../const/constant";
+import { BOOKING_ROOM_FAIL, BOOKING_ROOM_SUCCESS, GET_TICKET_BY_USER, GET_TICKET_BY_USER_IN_ROOM } from "../const/constant";
 
 // export const createTicket = (checkIn, checkOut, userId, roomId) => {
 //   return async (dispatch) => {
@@ -44,8 +44,22 @@ export const getTicketByUserInRoom = (userId, roomId) => {
       // result này là tất cả vé của user trong tất cả phòng, cần lọc ra chỉ trong roomId thôi
       let result2 = result.data.filter((ticket) => ticket.roomId._id === roomId);
       dispatch({
-        type: GET_TICKET_BY_USER,
+        type: GET_TICKET_BY_USER_IN_ROOM,
         data: result2,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const getTicketByUser = (userId) => {
+  return async (dispatch) => {
+    try {
+      let result = await http.get("/api/tickets/by-user?userId=" + userId);
+      dispatch({
+        type: GET_TICKET_BY_USER,
+        data: result.data,
       });
     } catch (error) {
       console.log(error);

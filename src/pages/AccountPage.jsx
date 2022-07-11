@@ -1,20 +1,27 @@
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
-import { Image, Tag, Button, Modal, message } from "antd";
+import { Button, Image, message, Modal, Tag, Table } from "antd";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { getTicketByUser } from "../redux/actions/ticketAction";
 import { updateUserImageAPI } from "../redux/actions/userAction";
 import { UPDATE_USER_AVATAR_END } from "../redux/const/constant";
+import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 export default function AccountPage() {
   // Nếu chưa đăng nhập, redirect về trang login để người dùng đăng nhập
   // Nếu đã đăng nhập thì ở lại trang này render thông tin ra
   // Điều kiện đã đăng nhập phải có đủ: USER_LOGIN, ACCESS_TOKEN và user trong redux
 
-  const { user, uploadAvatarStatus } = useSelector((state) => state.accountReducer);
-  const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
+  const { user, uploadAvatarStatus } = useSelector((state) => state.accountReducer);
+  const { userTicket } = useSelector((state) => state.ticketReducer);
+  console.log(userTicket);
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    dispatch(getTicketByUser(user._id));
+  }, []);
 
   useEffect(() => {
     if (uploadAvatarStatus === "success") {
@@ -44,6 +51,35 @@ export default function AccountPage() {
     setModalVisible(false);
     const img = document.getElementById("account-page-file").files[0];
     dispatch(updateUserImageAPI(img));
+  };
+
+  const tableColumns = [
+    {
+      title: "Tên phòng",
+      render: (_, record) => {
+        return record.roomId?.name || "Unknown";
+      },
+    },
+    {
+      title: "Check in",
+      render: (_, record) => {
+        return record.checkIn || "Unknown";
+      },
+    },
+    {
+      title: "Check out",
+      render: (_, record) => {
+        return record.checkOut || "Unknown";
+      },
+    },
+  ];
+
+  const renderTicketHistory = (list) => {
+    return (
+      <div className="ticket-list">
+        <Table columns={tableColumns} dataSource={list} bordered rowKey={(record) => record._id} />
+      </div>
+    );
   };
 
   return (
@@ -83,6 +119,10 @@ export default function AccountPage() {
                 {user.address || "Không có thông tin"}
               </div>
             </div>
+          </div>
+          <div className="ticket">
+            <h3 style={{ fontWeight: "bold" }}>Lịch sử đặt phòng</h3>
+            {renderTicketHistory(userTicket)}
           </div>
         </div>
       </div>

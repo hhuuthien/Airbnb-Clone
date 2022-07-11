@@ -7,11 +7,13 @@ import {
   CREATE_TICKET_FAIL,
   CREATE_TICKET_SUCCESS,
   GET_TICKET_BY_USER,
+  GET_TICKET_BY_USER_IN_ROOM,
 } from "../const/constant";
 
 const defaultState = {
   ticketDetail: {},
   userTicketInThisRoom: [],
+  userTicket: [],
   createTicketStatus: "",
   bookingStatus: "",
 };
@@ -55,7 +57,7 @@ export const ticketReducer = (state = defaultState, action) => {
         bookingStatus: "",
       };
     }
-    case GET_TICKET_BY_USER: {
+    case GET_TICKET_BY_USER_IN_ROOM: {
       return {
         ...state,
         userTicketInThisRoom: action.data,
@@ -65,6 +67,12 @@ export const ticketReducer = (state = defaultState, action) => {
       return {
         ...state,
         userTicketInThisRoom: [],
+      };
+    }
+    case GET_TICKET_BY_USER: {
+      return {
+        ...state,
+        userTicket: action.data,
       };
     }
     default:
