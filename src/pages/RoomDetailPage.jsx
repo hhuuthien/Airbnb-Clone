@@ -1,14 +1,13 @@
-import { DeleteOutlined, EditOutlined, HomeOutlined } from "@ant-design/icons";
-import { Avatar, Breadcrumb, Button, Comment, Image, Input, message, Modal, DatePicker } from "antd";
+import { DeleteOutlined, EditOutlined, HomeOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { Avatar, Breadcrumb, Button, Comment, DatePicker, Image, Input, message, Modal } from "antd";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createReview, editReview, getReview } from "../redux/actions/reviewAction";
+import { createReview, getReview } from "../redux/actions/reviewAction";
 import { getRoomDetail } from "../redux/actions/roomAction";
-import { createTicket } from "../redux/actions/ticketAction";
-import { CLEAR_ROOM_DETAIL, CREATE_REVIEW_END, CREATE_TICKET_END } from "../redux/const/constant";
+import { bookRoom, getTicketByUserInRoom } from "../redux/actions/ticketAction";
+import { BOOKING_ROOM_END, CLEAR_ROOM_DETAIL, CLEAR_TICKET_BY_USER, CREATE_REVIEW_END } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
-import { QuestionCircleOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
@@ -16,7 +15,7 @@ const { RangePicker } = DatePicker;
 export default function RoomDetailPage(props) {
   const { roomDetail } = useSelector((root) => root.roomReducer);
   const { reviewList, createReviewStatus } = useSelector((root) => root.reviewReducer);
-  const { createTicketStatus } = useSelector((root) => root.ticketReducer);
+  const { bookingStatus, userTicketInThisRoom } = useSelector((root) => root.ticketReducer);
   const { user } = useSelector((root) => root.accountReducer);
   const dispatch = useDispatch();
 
@@ -29,9 +28,14 @@ export default function RoomDetailPage(props) {
   useEffect(() => {
     dispatch(getRoomDetail(rid));
     dispatch(getReview(rid));
+    // lấy những ticket của user trong 1 phòng
+    if (localStorage.getItem(USER_LOGIN) && localStorage.getItem(ACCESS_TOKEN) && user.email) dispatch(getTicketByUserInRoom(user._id, rid));
     return () => {
       dispatch({
         type: CLEAR_ROOM_DETAIL,
+      });
+      dispatch({
+        type: CLEAR_TICKET_BY_USER,
       });
     };
   }, []);
@@ -51,18 +55,36 @@ export default function RoomDetailPage(props) {
   }, [createReviewStatus]);
 
   useEffect(() => {
-    if (createTicketStatus === "success") {
+    if (bookingStatus === "success") {
       message.success("Đặt phòng thành công");
       dispatch({
-        type: CREATE_TICKET_END,
+        type: BOOKING_ROOM_END,
       });
-    } else if (createTicketStatus === "fail") {
+    } else if (bookingStatus === "fail") {
       message.error("Đặt phòng không thành công. Vui lòng thử lại sau");
       dispatch({
-        type: CREATE_TICKET_END,
+        type: BOOKING_ROOM_END,
       });
     }
-  }, [createTicketStatus]);
+  }, [bookingStatus]);
+
+  const checkTicket = () => {
+    // Kiểm tra xem user đang đăng nhập có đặt phòng này không, nếu có thì hiện tại có đang trong thời gian đặt phòng không
+    if (userTicketInThisRoom.length !== 0) {
+      // user này đã đặt phòng này -> xét ticket cuối cùng
+      const lastTicket = userTicketInThisRoom[userTicketInThisRoom.length - 1];
+      const checkInTime = Date.parse(lastTicket.checkIn);
+      const checkOutTime = Date.parse(lastTicket.checkOut);
+      const now = Date.now();
+      if (checkInTime < now && now < checkOutTime) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
 
   let furnitureList = []; // gom hết tiện ích vô mảng này, chuyển thành obj có tên và hình ảnh
   roomDetail.wifi && furnitureList.push({ name: "Wifi", img: "/img/furniture/wifi.png" });
@@ -210,19 +232,27 @@ export default function RoomDetailPage(props) {
   const renderBookingButton = () => {
     if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
       return <></>;
+    } else {
+      if (checkTicket()) {
+        return (
+          <Button disabled type="primary" shape="round">
+            <i className="fa-solid fa-circle-check" style={{ marginRight: 8 }}></i> Bạn đang đặt phòng này
+          </Button>
+        );
+      } else {
+        return (
+          <Button type="primary" shape="round" onClick={() => setModalVisible2(true)}>
+            <i className="fa-solid fa-circle-plus" style={{ marginRight: 8 }}></i> Đặt phòng
+          </Button>
+        );
+      }
     }
-
-    return (
-      <Button type="primary" shape="round" onClick={() => setModalVisible2(true)}>
-        <i className="fa-solid fa-circle-plus" style={{ marginRight: 8 }}></i> Đặt phòng
-      </Button>
-    );
   };
 
   const bookingRoom = () => {
     const startTime = timeRange[0].seconds(0).milliseconds(0).toISOString();
     const endTime = timeRange[1].seconds(0).milliseconds(0).toISOString();
-    dispatch(createTicket(startTime, endTime, user._id, rid));
+    dispatch(bookRoom(startTime, endTime, rid));
     setModalVisible2(false);
   };
 

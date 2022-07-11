@@ -1,5 +1,6 @@
 import { ACCESS_TOKEN, USER_LOGIN } from "../../util/setting";
 import {
+  BOOKING_ROOM_SUCCESS,
   END_LOGIN,
   END_SIGNUP,
   LOGIN_FAIL,
@@ -103,6 +104,15 @@ export const accountReducer = (state = defaultState, action) => {
       return {
         ...state,
         uploadAvatarStatus: "",
+      };
+    }
+    case BOOKING_ROOM_SUCCESS: {
+      // cập nhật luôn trong localStorage
+      localStorage.setItem(USER_LOGIN, JSON.stringify(action.data.userDetail));
+
+      return {
+        ...state,
+        user: action.data.userDetail,
       };
     }
     default: {
