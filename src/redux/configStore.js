@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
 
 const middleWare = applyMiddleware(reduxThunk);
 
-const composeCustom = compose(middleWare, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-// const composeCustom = compose(middleWare);
+// const composeCustom = compose(middleWare, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const composeCustom = compose(middleWare);
 
 export const store = createStore(rootReducer, composeCustom);
