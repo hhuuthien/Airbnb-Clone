@@ -34,6 +34,15 @@ $navbar-padding: 20px 0;
       }
     }
 
+    .logo-text-admin {
+      color: $primary-color;
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      transform: translateY(2px);
+    }
+
     .account {
       height: $navbar-height;
       padding: $navbar-padding;

@@ -69,27 +69,22 @@ export default function AdminHomePage(props) {
       } else {
         return (
           <div className="admin-content">
-            <Button type="primary" onClick={() => props.history.push("/manage_location")} style={{ width: 200, marginBottom: 10 }}>
+            <Button shape="round" type="primary" onClick={() => props.history.push("/manage_location")} style={{ width: "100%", marginBottom: 10 }}>
               Quản lý vị trí
             </Button>
-            <br />
-            <Button type="primary" onClick={() => props.history.push("/manage_user")} style={{ width: 200, marginBottom: 10 }}>
+            <Button shape="round" type="primary" onClick={() => props.history.push("/manage_user")} style={{ width: "100%", marginBottom: 10 }}>
               Quản lý người dùng
             </Button>
-            <br />
-            <Button type="primary" onClick={() => props.history.push("/manage_room")} style={{ width: 200, marginBottom: 10 }}>
+            <Button shape="round" type="primary" onClick={() => props.history.push("/manage_room")} style={{ width: "100%", marginBottom: 10 }}>
               Quản lý phòng cho thuê
             </Button>
-            <br />
-            <Button type="primary" onClick={() => props.history.push("/manage_room")} style={{ width: 200, marginBottom: 10 }}>
+            <Button shape="round" type="primary" onClick={() => props.history.push("/manage_room")} style={{ width: "100%", marginBottom: 10 }}>
               Quản lý đánh giá
             </Button>
-            <br />
-            <Button type="primary" onClick={() => props.history.push("/manage_user")} style={{ width: 200, marginBottom: 10 }}>
+            <Button shape="round" type="primary" onClick={() => props.history.push("/manage_user")} style={{ width: "100%", marginBottom: 10 }}>
               Quản lý vé theo người dùng
             </Button>
-            <br />
-            <Button type="primary" onClick={() => props.history.push("/manage_room")} style={{ width: 200, marginBottom: 10 }}>
+            <Button shape="round" type="primary" onClick={() => props.history.push("/manage_room")} style={{ width: "100%", marginBottom: 10 }}>
               Quản lý vé theo phòng
             </Button>
           </div>

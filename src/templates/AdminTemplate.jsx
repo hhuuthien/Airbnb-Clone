@@ -1,8 +1,7 @@
 import { Route } from "react-router-dom";
-import HeaderHome from "../components/HeaderHome";
-import FooterHome from "../components/FooterHome";
+import HeaderAdmin from "../components/HeaderAdmin";
 
-export default function HomeTemplate(props) {
+export default function AdminTemplate(props) {
   return (
     <Route
       exact
@@ -10,9 +9,8 @@ export default function HomeTemplate(props) {
       render={(propsRoute) => {
         return (
           <>
-            <HeaderHome {...propsRoute} />
+            <HeaderAdmin {...propsRoute} />
             <props.component {...propsRoute} />
-            <FooterHome />
           </>
         );
       }}
