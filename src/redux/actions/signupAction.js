@@ -12,26 +12,20 @@ export const signupAPI = (signupInfo) => {
       console.log(result);
       if (result.status === 200) {
         // đăng kí thành công
-        setTimeout(() => {
-          dispatch({
-            type: SIGNUP_SUCCESS,
-          });
-        }, 1000);
+        dispatch({
+          type: SIGNUP_SUCCESS,
+        });
       } else {
         // đăng kí thất bại
-        setTimeout(() => {
-          dispatch({
-            type: SIGNUP_FAIL,
-          });
-        }, 1000);
-      }
-    } catch (error) {
-      // đăng kí thất bại
-      setTimeout(() => {
         dispatch({
           type: SIGNUP_FAIL,
         });
-      }, 1000);
+      }
+    } catch (error) {
+      // đăng kí thất bại
+      dispatch({
+        type: SIGNUP_FAIL,
+      });
       console.log(error);
     }
   };

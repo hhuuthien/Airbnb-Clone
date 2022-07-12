@@ -6,8 +6,14 @@ import {
   CREATE_TICKET_END,
   CREATE_TICKET_FAIL,
   CREATE_TICKET_SUCCESS,
+  DELETE_TICKET_END,
+  DELETE_TICKET_FAIL,
+  DELETE_TICKET_SUCCESS,
   GET_TICKET_BY_USER,
   GET_TICKET_BY_USER_IN_ROOM,
+  UPDATE_TICKET_END,
+  UPDATE_TICKET_FAIL,
+  UPDATE_TICKET_SUCCESS,
 } from "../const/constant";
 
 const defaultState = {
@@ -15,6 +21,8 @@ const defaultState = {
   userTicketInThisRoom: [],
   userTicket: [],
   createTicketStatus: "",
+  deleteTicketStatus: "",
+  updateTicketStatus: "",
   bookingStatus: "",
 };
 
@@ -73,6 +81,43 @@ export const ticketReducer = (state = defaultState, action) => {
       return {
         ...state,
         userTicket: action.data,
+      };
+    }
+    case DELETE_TICKET_SUCCESS: {
+      return {
+        ...state,
+        deleteTicketStatus: "success",
+        userTicket: state.userTicket.filter((item) => item._id !== action.data),
+      };
+    }
+    case DELETE_TICKET_FAIL: {
+      return {
+        ...state,
+        deleteTicketStatus: "fail",
+      };
+    }
+    case DELETE_TICKET_END: {
+      return {
+        ...state,
+        deleteTicketStatus: "",
+      };
+    }
+    case UPDATE_TICKET_SUCCESS: {
+      return {
+        ...state,
+        updateTicketStatus: "success",
+      };
+    }
+    case UPDATE_TICKET_FAIL: {
+      return {
+        ...state,
+        updateTicketStatus: "fail",
+      };
+    }
+    case UPDATE_TICKET_END: {
+      return {
+        ...state,
+        updateTicketStatus: "",
       };
     }
     default:

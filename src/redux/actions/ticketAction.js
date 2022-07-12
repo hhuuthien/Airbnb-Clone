@@ -1,23 +1,34 @@
 import { http } from "../../util/setting";
-import { BOOKING_ROOM_FAIL, BOOKING_ROOM_SUCCESS, GET_TICKET_BY_USER, GET_TICKET_BY_USER_IN_ROOM } from "../const/constant";
+import {
+  BOOKING_ROOM_FAIL,
+  BOOKING_ROOM_SUCCESS,
+  CREATE_TICKET_FAIL,
+  CREATE_TICKET_SUCCESS,
+  DELETE_TICKET_FAIL,
+  DELETE_TICKET_SUCCESS,
+  GET_TICKET_BY_USER,
+  GET_TICKET_BY_USER_IN_ROOM,
+  UPDATE_TICKET_FAIL,
+  UPDATE_TICKET_SUCCESS,
+} from "../const/constant";
 
-// export const createTicket = (checkIn, checkOut, userId, roomId) => {
-//   return async (dispatch) => {
-//     try {
-//       let result = await http.post("/api/tickets", { checkIn, checkOut, userId, roomId });
-//       console.log(result.data);
-//       dispatch({
-//         type: CREATE_TICKET_SUCCESS,
-//         data: result.data,
-//       });
-//     } catch (error) {
-//       console.log(error);
-//       dispatch({
-//         type: CREATE_TICKET_FAIL,
-//       });
-//     }
-//   };
-// };
+export const createTicketAPI = (checkIn, checkOut, userId, roomId) => {
+  return async (dispatch) => {
+    try {
+      let result = await http.post("/api/tickets", { checkIn, checkOut, userId, roomId });
+      console.log(result.data);
+      dispatch({
+        type: CREATE_TICKET_SUCCESS,
+        data: result.data,
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: CREATE_TICKET_FAIL,
+      });
+    }
+  };
+};
 
 export const bookRoom = (checkIn, checkOut, roomId) => {
   return async (dispatch) => {
@@ -63,6 +74,41 @@ export const getTicketByUser = (userId) => {
       });
     } catch (error) {
       console.log(error);
+    }
+  };
+};
+
+export const deleteTicket = (id) => {
+  return async (dispatch) => {
+    try {
+      let result = await http.delete("/api/tickets/" + id);
+      dispatch({
+        type: DELETE_TICKET_SUCCESS,
+        data: result.data._id,
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: DELETE_TICKET_FAIL,
+      });
+    }
+  };
+};
+
+export const updateTicket = (id, info) => {
+  return async (dispatch) => {
+    try {
+      let result = await http.put("/api/tickets/" + id, info);
+      console.log(result.data);
+      dispatch({
+        type: UPDATE_TICKET_SUCCESS,
+        data: result.data,
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: UPDATE_TICKET_FAIL,
+      });
     }
   };
 };

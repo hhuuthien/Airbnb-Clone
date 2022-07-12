@@ -13,27 +13,21 @@ export const loginAPI = (loginInfo) => {
         // đăng nhập thành công
         localStorage.setItem(ACCESS_TOKEN, result.data.token);
         localStorage.setItem(USER_LOGIN, JSON.stringify(result.data.user));
-        setTimeout(() => {
-          dispatch({
-            type: LOGIN_SUCCESS,
-            data: result.data.user,
-          });
-        }, 1000);
+        dispatch({
+          type: LOGIN_SUCCESS,
+          data: result.data.user,
+        });
       } else {
         // đăng nhập thất bại
-        setTimeout(() => {
-          dispatch({
-            type: LOGIN_FAIL,
-          });
-        }, 1000);
-      }
-    } catch (error) {
-      // đăng nhập thất bại
-      setTimeout(() => {
         dispatch({
           type: LOGIN_FAIL,
         });
-      }, 1000);
+      }
+    } catch (error) {
+      // đăng nhập thất bại
+      dispatch({
+        type: LOGIN_FAIL,
+      });
     }
   };
 };
