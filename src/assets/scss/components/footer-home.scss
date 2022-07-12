@@ -1,0 +1,50 @@
+@import "../base/base.scss";
+
+.footer-home {
+  width: 100%;
+  background-color: $primary-color-light;
+
+  .container {
+    width: 100%;
+    max-width: $container-width;
+    margin: $container-margin;
+    padding: $container-padding;
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+
+      @media screen and (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .foot1,
+      .foot2,
+      .foot3,
+      .foot4 {
+        padding: 20px 0;
+
+        h4 {
+          font-weight: bold;
+        }
+
+        a {
+          display: block;
+          margin-bottom: 5px;
+          color: grey;
+          font-size: 12px;
+
+          &:hover {
+            color: $primary-color;
+          }
+        }
+      }
+    }
+
+    .footer2 {
+      padding-bottom: 20px;
+      font-size: 12px;
+      text-align: center;
+    }
+  }
+}

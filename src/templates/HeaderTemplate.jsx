@@ -1,5 +1,6 @@
 import { Route } from "react-router-dom";
 import HeaderHome from "../components/HeaderHome";
+import FooterHome from "../components/FooterHome";
 
 export default function HomeTemplate(props) {
   return (
@@ -11,6 +12,7 @@ export default function HomeTemplate(props) {
           <>
             <HeaderHome {...propsRoute} />
             <props.component {...propsRoute} />
+            <FooterHome />
           </>
         );
       }}

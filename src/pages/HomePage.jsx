@@ -1,4 +1,4 @@
-import { Button, Checkbox, Drawer, Input, Pagination } from "antd";
+import { Button, Carousel, Checkbox, Drawer, Input, Pagination } from "antd";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -145,6 +145,25 @@ export default function HomePage(props) {
   return (
     <div className="home-page">
       <div className="container">
+        <div className="airbnb-carousel" style={{ marginTop: 30 }}>
+          <Carousel autoplay>
+            <div>
+              <img src="/img/carousel/1.jpg" className="carousel-img" />
+            </div>
+            <div>
+              <img src="/img/carousel/2.jpg" className="carousel-img" />
+            </div>
+            <div>
+              <img src="/img/carousel/3.jpg" className="carousel-img" />
+            </div>
+            <div>
+              <img src="/img/carousel/4.jpg" className="carousel-img" />
+            </div>
+            <div>
+              <img src="/img/carousel/5.jpg" className="carousel-img" />
+            </div>
+          </Carousel>
+        </div>
         <div className="search">
           <Search placeholder="Tìm kiếm vị trí..." allowClear enterButton="Tìm kiếm" size="middle" onSearch={onSearch} />
           <Button type="primary" onClick={showDrawer} className="btn-filter">
