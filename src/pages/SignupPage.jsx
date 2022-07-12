@@ -54,7 +54,6 @@ export default function SignupPage(props) {
         gender: true,
         address: "",
       };
-      console.log("signupInfo", signupInfo);
       dispatch(signupAPI(signupInfo));
     },
   });

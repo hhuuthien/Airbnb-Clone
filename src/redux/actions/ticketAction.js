@@ -17,7 +17,6 @@ export const createTicketAPI = (checkIn, checkOut, userId, roomId) => {
   return async (dispatch) => {
     try {
       let result = await http.post("/api/tickets", { checkIn, checkOut, userId, roomId });
-      console.log(result.data);
       dispatch({
         type: CREATE_TICKET_SUCCESS,
         data: result.data,
@@ -35,7 +34,6 @@ export const bookRoom = (checkIn, checkOut, roomId) => {
   return async (dispatch) => {
     try {
       let result = await http.post("/api/rooms/booking/", { roomId, checkIn, checkOut });
-      console.log(result.data);
       dispatch({
         type: BOOKING_ROOM_SUCCESS,
         data: result.data,

@@ -15,7 +15,6 @@ export default function AccountPage() {
   const dispatch = useDispatch();
   const { user, uploadAvatarStatus } = useSelector((state) => state.accountReducer);
   const { userTicket } = useSelector((state) => state.ticketReducer);
-  console.log(userTicket);
 
   const [modalVisible, setModalVisible] = useState(false);
 

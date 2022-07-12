@@ -50,7 +50,6 @@ export default function AdminUserPage(props) {
       setModalVisible(false);
       formik.handleReset();
       const fullValues = { ...values, gender, type, birthday };
-      console.log(fullValues);
       dispatch(createUserAPI(fullValues));
     },
   });

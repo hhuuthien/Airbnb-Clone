@@ -9,7 +9,6 @@ export const signupAPI = (signupInfo) => {
 
     try {
       let result = await http.post("/api/auth/register", signupInfo);
-      console.log(result);
       if (result.status === 200) {
         // đăng kí thành công
         dispatch({

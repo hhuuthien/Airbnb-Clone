@@ -35,7 +35,6 @@ export const editReview = (id, newContent) => {
   return async (dispatch) => {
     try {
       let result = await http.put("/api/reviews/" + id, { content: newContent });
-      // console.log(result.data);
     } catch (error) {
       console.log(error);
     }

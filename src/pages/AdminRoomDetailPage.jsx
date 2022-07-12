@@ -30,7 +30,6 @@ export default function AdminRoomDetailPage(props) {
   const { user } = useSelector((state) => state.accountReducer);
   const { reviewList, deleteReviewStatus } = useSelector((state) => state.reviewReducer);
   const { roomTicket, deleteTicketStatus, updateTicketStatus, createTicketStatus } = useSelector((state) => state.ticketReducer);
-  console.log(roomTicket);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
@@ -522,7 +521,7 @@ export default function AdminRoomDetailPage(props) {
             <div className="booking-time">
               <RangePicker showTime format="DD/MM/YYYY HH:mm" style={{ width: "100%" }} onChange={(v) => setTimeRange2(v)} />
             </div>
-            <div className="booking-roomId">
+            <div className="booking-userId">
               <label>ID của user</label>
               <Input className="input-id" name="id" allowClear id="input-user-id" />
             </div>
