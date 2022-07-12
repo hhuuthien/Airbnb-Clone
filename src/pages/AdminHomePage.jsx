@@ -79,7 +79,7 @@ export default function AdminHomePage(props) {
               Quản lý phòng cho thuê
             </Button>
             <Button shape="round" type="primary" onClick={() => props.history.push("/manage_room")} style={{ width: "100%", marginBottom: 10 }}>
-              Quản lý đánh giá
+              Quản lý đánh giá theo phòng
             </Button>
             <Button shape="round" type="primary" onClick={() => props.history.push("/manage_user")} style={{ width: "100%", marginBottom: 10 }}>
               Quản lý vé theo người dùng

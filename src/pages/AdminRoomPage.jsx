@@ -1,17 +1,18 @@
-import { Button, Checkbox, Image, Input, Modal, Select, Table, message } from "antd";
+import { Button, Checkbox, Image, Input, message, Modal, Select, Table } from "antd";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { getLocationAPI } from "../redux/actions/locationAction";
 import { createRoom, getRoomByLocationAPI } from "../redux/actions/roomAction";
-import { CLEAR_ROOM_LIST, CREATE_ROOM_END } from "../redux/const/constant";
+import { CLEAR_ROOM_LIST, CREATE_ROOM_END, UPDATE_ROOM_LIST_BY_SEARCHING_AND_FILTERING } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 const { Option } = Select;
+const { Search } = Input;
 
 export default function AdminRoomPage(props) {
   const dispatch = useDispatch();
-  const { roomList, createStatus } = useSelector((root) => root.roomReducer);
+  const { roomList, roomListCopy, createStatus } = useSelector((root) => root.roomReducer);
   const { locationList } = useSelector((root) => root.locationReducer);
   const { user } = useSelector((state) => state.accountReducer);
 
@@ -149,6 +150,19 @@ export default function AdminRoomPage(props) {
     ]);
   };
 
+  const onSearch = (keyword) => {
+    let result = [];
+    if (keyword === "") {
+      result = [...roomListCopy];
+    } else {
+      result = roomListCopy.filter((room) => room.name && room.name.includes(keyword));
+    }
+    dispatch({
+      type: UPDATE_ROOM_LIST_BY_SEARCHING_AND_FILTERING,
+      data: result,
+    });
+  };
+
   // Nếu chưa đăng nhập hoặc đã đăng nhập nhưng không phải tài khoản admin --> redirect
   if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
     return <Redirect to="/admin" />;
@@ -164,6 +178,7 @@ export default function AdminRoomPage(props) {
                 <i className="fa-solid fa-circle-plus"></i>
                 Tạo phòng mới
               </Button>
+              <Search style={{ marginTop: 30 }} placeholder="Tìm phòng..." allowClear enterButton="Tìm kiếm" size="middle" onSearch={onSearch} />
               {renderRoomList(roomListReal)}
             </div>
           </div>

@@ -5,12 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as YUB from "yup";
 import { createLocationAPI, getLocationAPI } from "../redux/actions/locationAction";
-import { CREATE_LOCATION_END } from "../redux/const/constant";
+import { CREATE_LOCATION_END, UPDATE_ARRAY_BY_SEARCHING } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
+const { Search } = Input;
 
 export default function AdminLocationPage(props) {
   const dispatch = useDispatch();
-  const { locationList, createStatus } = useSelector((state) => state.locationReducer);
+  const { locationList, locationListCopy, createStatus } = useSelector((state) => state.locationReducer);
   const { user } = useSelector((state) => state.accountReducer);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -125,6 +126,19 @@ export default function AdminLocationPage(props) {
     );
   };
 
+  const onSearch = (keyword) => {
+    let result = [];
+    if (keyword === "") {
+      result = [...locationListCopy];
+    } else {
+      result = locationListCopy.filter((location) => location.name && location.name.includes(keyword));
+    }
+    dispatch({
+      type: UPDATE_ARRAY_BY_SEARCHING,
+      data: result,
+    });
+  };
+
   // Nếu chưa đăng nhập hoặc đã đăng nhập nhưng không phải tài khoản admin --> redirect
   if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
     return <Redirect to="/admin" />;
@@ -140,6 +154,7 @@ export default function AdminLocationPage(props) {
                 <i className="fa-solid fa-circle-plus"></i>
                 Tạo vị trí mới
               </Button>
+              <Search style={{ marginTop: 30 }} placeholder="Tìm vị trí..." allowClear enterButton="Tìm kiếm" size="middle" onSearch={onSearch} />
               {renderLocationList()}
             </div>
           </div>

@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { createUserAPI, getUserAPI } from "../redux/actions/userAction";
-import { CREATE_USER_END } from "../redux/const/constant";
+import { CREATE_USER_END, UPDATE_USER_LIST_BY_SEARCHING } from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 
 const { Option } = Select;
+const { Search } = Input;
 
 export default function AdminUserPage(props) {
   const dispatch = useDispatch();
-  const { userList, createStatus } = useSelector((root) => root.userReducer);
+  const { userList, userListCopy, createStatus } = useSelector((root) => root.userReducer);
   const { user } = useSelector((state) => state.accountReducer);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -121,6 +122,19 @@ export default function AdminUserPage(props) {
 
   const handleChangeType = (type) => setType(type);
 
+  const onSearch = (keyword) => {
+    let result = [];
+    if (keyword === "") {
+      result = [...userListCopy];
+    } else {
+      result = userListCopy.filter((user) => (user.email && user.email.includes(keyword)) || (user.name && user.name.includes(keyword)));
+    }
+    dispatch({
+      type: UPDATE_USER_LIST_BY_SEARCHING,
+      data: result,
+    });
+  };
+
   // Nếu chưa đăng nhập hoặc đã đăng nhập nhưng không phải tài khoản admin --> redirect
   if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
     return <Redirect to="/admin" />;
@@ -136,6 +150,7 @@ export default function AdminUserPage(props) {
                 <i className="fa-solid fa-circle-plus"></i>
                 Tạo user mới
               </Button>
+              <Search style={{ marginTop: 30 }} placeholder="Tìm user theo tên hoặc email..." allowClear enterButton="Tìm kiếm" size="middle" onSearch={onSearch} />
               {renderUserList()}
             </div>
           </div>

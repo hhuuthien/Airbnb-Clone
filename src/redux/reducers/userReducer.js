@@ -10,11 +10,13 @@ import {
   GET_USER_DETAIL,
   UPDATE_USER_END,
   UPDATE_USER_FAIL,
+  UPDATE_USER_LIST_BY_SEARCHING,
   UPDATE_USER_SUCCESS,
 } from "../const/constant";
 
 const defaultState = {
   userList: [],
+  userListCopy: [],
   userDetail: {},
   updateStatus: "",
   deleteStatus: "",
@@ -27,6 +29,7 @@ export const userReducer = (state = defaultState, action) => {
       return {
         ...state,
         userList: action.data,
+        userListCopy: action.data,
       };
     }
     case GET_USER_DETAIL: {
@@ -84,6 +87,7 @@ export const userReducer = (state = defaultState, action) => {
         ...state,
         createStatus: "success",
         userList: [...state.userList, action.data],
+        userListCopy: [...state.userListCopy, action.data],
       };
     }
     case CREATE_USER_FAIL: {
@@ -96,6 +100,12 @@ export const userReducer = (state = defaultState, action) => {
       return {
         ...state,
         createStatus: "",
+      };
+    }
+    case UPDATE_USER_LIST_BY_SEARCHING: {
+      return {
+        ...state,
+        userList: action.data,
       };
     }
     default: {

@@ -312,7 +312,7 @@ export default function RoomDetailPage(props) {
               {roomDetail.guests} khách • {roomDetail.bedRoom} phòng ngủ • {roomDetail.bath} phòng tắm
             </div>
             <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Tiện ích</h3>
-            <div className="furniture">{renderFurniture(furnitureList)}</div>
+            <div className="room-furniture">{renderFurniture(furnitureList)}</div>
             <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Đánh giá</h3>
             {renderReviewArea()}
             {renderReview()}
