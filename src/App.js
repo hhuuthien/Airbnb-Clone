@@ -19,27 +19,32 @@ import RoomDetailPage from "./pages/RoomDetailPage";
 import SignupPage from "./pages/SignupPage";
 
 // templates
-import HeaderFooterTemplate from "./templates/HeaderFooterTemplate";
 import AdminTemplate from "./templates/AdminTemplate";
+import HeaderFooterTemplate from "./templates/HeaderFooterTemplate";
+
+// component
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <BrowserRouter>
-      <Switch>
-        <HeaderFooterTemplate path="/login" component={LoginPage} />
-        <HeaderFooterTemplate path="/signup" component={SignupPage} />
-        <HeaderFooterTemplate path="/account" component={AccountPage} />
-        <AdminTemplate path="/admin" component={AdminHomePage} />
-        <AdminTemplate path="/manage_location" component={AdminLocationPage} />
-        <AdminTemplate path="/location/:lid" component={AdminLocationDetailPage} />
-        <AdminTemplate path="/manage_user" component={AdminUserPage} />
-        <AdminTemplate path="/user/:uid" component={AdminUserDetailPage} />
-        <HeaderFooterTemplate path="/l/:lid" component={LocationDetailPage} />
-        <HeaderFooterTemplate path="/r/:rid" component={RoomDetailPage} />
-        <AdminTemplate path="/manage_room" component={AdminRoomPage} />
-        <AdminTemplate path="/room/:rid" component={AdminRoomDetailPage} />
-        <HeaderFooterTemplate path="/" component={HomePage} />
-      </Switch>
+      <ScrollToTop>
+        <Switch>
+          <HeaderFooterTemplate path="/login" component={LoginPage} />
+          <HeaderFooterTemplate path="/signup" component={SignupPage} />
+          <HeaderFooterTemplate path="/account" component={AccountPage} />
+          <AdminTemplate path="/admin" component={AdminHomePage} />
+          <AdminTemplate path="/manage_location" component={AdminLocationPage} />
+          <AdminTemplate path="/location/:lid" component={AdminLocationDetailPage} />
+          <AdminTemplate path="/manage_user" component={AdminUserPage} />
+          <AdminTemplate path="/user/:uid" component={AdminUserDetailPage} />
+          <HeaderFooterTemplate path="/l/:lid" component={LocationDetailPage} />
+          <HeaderFooterTemplate path="/r/:rid" component={RoomDetailPage} />
+          <AdminTemplate path="/manage_room" component={AdminRoomPage} />
+          <AdminTemplate path="/room/:rid" component={AdminRoomDetailPage} />
+          <HeaderFooterTemplate path="/" component={HomePage} />
+        </Switch>
+      </ScrollToTop>
     </BrowserRouter>
   );
 }

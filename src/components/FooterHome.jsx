@@ -33,6 +33,13 @@ export default function FooterHome() {
             <a>Nhà đầu tư</a>
           </div>
         </div>
+        <div className="footer1">
+          <i className="fa-brands fa-facebook-f"></i>
+          <i className="fa-brands fa-youtube"></i>
+          <i className="fa-brands fa-instagram"></i>
+          <i className="fa-brands fa-tiktok"></i>
+          <i className="fa-brands fa-twitter"></i>
+        </div>
         <div className="footer2">© 2022 Airbnb, Inc - All rights reserved.</div>
       </div>
     </div>

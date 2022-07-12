@@ -88,5 +88,32 @@
         }
       }
     }
+
+    .category-list {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+
+      .category {
+        padding: 10px 25px;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        border-radius: 10px;
+        margin-right: 15px;
+        margin-bottom: 15px;
+        min-width: max-content;
+        text-align: center;
+        cursor: pointer;
+        transition: $transition-value;
+
+        &:hover {
+          background-color: $primary-color-light;
+        }
+
+        img {
+          height: 20px;
+          margin-bottom: 5px;
+        }
+      }
+    }
   }
 }

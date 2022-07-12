@@ -6,12 +6,13 @@ import Room from "../components/Room";
 import { getLocationDetailAPI } from "../redux/actions/locationAction";
 import { getRoomByLocationAPI } from "../redux/actions/roomAction";
 import { CLEAR_LOCATION_DETAIL, UPDATE_ROOM_LIST_BY_SEARCHING_AND_FILTERING } from "../redux/const/constant";
+import Location from "../components/Location";
 
 const { Search } = Input;
 
 export default function LocationDetailPage(props) {
   const dispatch = useDispatch();
-  const { locationDetail } = useSelector((root) => root.locationReducer);
+  const { locationDetail, locationList } = useSelector((root) => root.locationReducer);
   const { roomList, roomListCopy } = useSelector((root) => root.roomReducer);
 
   const [visibleDrawer, setVisibleDrawer] = useState(false);
@@ -44,7 +45,7 @@ export default function LocationDetailPage(props) {
         type: CLEAR_LOCATION_DETAIL,
       });
     };
-  }, []);
+  }, [props.match.params]);
 
   const roomSearch = (list, keyword) => {
     let result = [];
@@ -222,6 +223,33 @@ export default function LocationDetailPage(props) {
     }
   };
 
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    return array;
+  };
+
+  const renderSuggestionLocation = () => {
+    if (locationList.length === 0) return <></>;
+
+    return (
+      <div className="location-suggestion" style={{ marginTop: 30 }}>
+        <h3 style={{ fontWeight: "bold" }}>Các vị trí khác</h3>
+        <div className="location-list">
+          {shuffleArray(locationList)
+            .slice(0, 4)
+            .map((item, index) => {
+              return <Location key={index} location={item} index={index} history={props.history} />;
+            })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="location-detail-page">
       <div className="container">
@@ -250,6 +278,7 @@ export default function LocationDetailPage(props) {
             </div>
           </div>
           {renderRoomArea()}
+          {renderSuggestionLocation()}
         </div>
       </div>
     </div>

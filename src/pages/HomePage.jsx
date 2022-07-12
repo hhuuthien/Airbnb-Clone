@@ -142,6 +142,29 @@ export default function HomePage(props) {
     getLocationList();
   }, []);
 
+  const categoryList = [
+    { name: "Bãi biển", image: "/img/icon/baibien.jpg" },
+    { name: "Biệt thự", image: "/img/icon/bietthu.jpg" },
+    { name: "Cắm trại", image: "/img/icon/camtrai.jpg" },
+    { name: "Công viên", image: "/img/icon/congvien.jpg" },
+    { name: "Đảo", image: "/img/icon/dao.jpg" },
+    { name: "Hồ bơi", image: "/img/icon/hoboi.jpg" },
+    { name: "Lâu đài", image: "/img/icon/laudai.jpg" },
+    { name: "Nhà nhỏ", image: "/img/icon/nhanho.jpg" },
+    { name: "Ven hồ", image: "/img/icon/venho.jpg" },
+  ];
+
+  const renderCategory = (list) => {
+    return list.map((item, index) => {
+      return (
+        <div className="category" key={index}>
+          <img src={item.image} alt={item.name} />
+          <div>{item.name}</div>
+        </div>
+      );
+    });
+  };
+
   return (
     <div className="home-page">
       <div className="container">
@@ -163,6 +186,9 @@ export default function HomePage(props) {
               <img src="/img/carousel/5.jpg" className="carousel-img" />
             </div>
           </Carousel>
+        </div>
+        <div className="category-list" style={{ marginTop: 30 }}>
+          {renderCategory(categoryList)}
         </div>
         <div className="search">
           <Search placeholder="Tìm kiếm vị trí..." allowClear enterButton="Tìm kiếm" size="middle" onSearch={onSearch} />
