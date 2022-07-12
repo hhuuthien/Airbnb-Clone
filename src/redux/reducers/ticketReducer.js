@@ -9,6 +9,7 @@ import {
   DELETE_TICKET_END,
   DELETE_TICKET_FAIL,
   DELETE_TICKET_SUCCESS,
+  GET_TICKET_BY_ROOM,
   GET_TICKET_BY_USER,
   GET_TICKET_BY_USER_IN_ROOM,
   UPDATE_TICKET_END,
@@ -20,6 +21,7 @@ const defaultState = {
   ticketDetail: {},
   userTicketInThisRoom: [],
   userTicket: [],
+  roomTicket: [],
   createTicketStatus: "",
   deleteTicketStatus: "",
   updateTicketStatus: "",
@@ -88,6 +90,7 @@ export const ticketReducer = (state = defaultState, action) => {
         ...state,
         deleteTicketStatus: "success",
         userTicket: state.userTicket.filter((item) => item._id !== action.data),
+        roomTicket: state.roomTicket.filter((item) => item._id !== action.data),
       };
     }
     case DELETE_TICKET_FAIL: {
@@ -118,6 +121,12 @@ export const ticketReducer = (state = defaultState, action) => {
       return {
         ...state,
         updateTicketStatus: "",
+      };
+    }
+    case GET_TICKET_BY_ROOM: {
+      return {
+        ...state,
+        roomTicket: action.data,
       };
     }
     default:

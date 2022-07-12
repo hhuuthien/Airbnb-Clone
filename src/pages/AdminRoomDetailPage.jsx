@@ -1,16 +1,27 @@
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { DeleteOutlined, EditOutlined, HomeOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Descriptions, Image, Input, message, Modal, Select, Comment, Avatar } from "antd";
+import { DeleteOutlined, EditOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { Avatar, Button, Checkbox, Comment, DatePicker, Descriptions, Image, Input, message, Modal, Select, Table } from "antd";
 import { useFormik } from "formik";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { getLocationAPI } from "../redux/actions/locationAction";
 import { deleteReview, editReview, getReview } from "../redux/actions/reviewAction";
 import { deleteRoom, getRoomDetail, updateRoom, uploadImageRoom } from "../redux/actions/roomAction";
-import { CLEAR_REVIEW_LIST, CLEAR_ROOM_DETAIL, DELETE_REVIEW_END, DELETE_ROOM_END, UPDATE_ROOM_END } from "../redux/const/constant";
+import { createTicketAPI, deleteTicket, getTicketByRoom, updateTicket } from "../redux/actions/ticketAction";
+import {
+  CLEAR_REVIEW_LIST,
+  CLEAR_ROOM_DETAIL,
+  CREATE_TICKET_END,
+  DELETE_REVIEW_END,
+  DELETE_ROOM_END,
+  DELETE_TICKET_END,
+  UPDATE_ROOM_END,
+  UPDATE_TICKET_END,
+} from "../redux/const/constant";
 import { ACCESS_TOKEN, USER_LOGIN } from "../util/setting";
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 export default function AdminRoomDetailPage(props) {
   const dispatch = useDispatch();
@@ -18,14 +29,24 @@ export default function AdminRoomDetailPage(props) {
   const { locationList } = useSelector((root) => root.locationReducer);
   const { user } = useSelector((state) => state.accountReducer);
   const { reviewList, deleteReviewStatus } = useSelector((state) => state.reviewReducer);
+  const { roomTicket, deleteTicketStatus, updateTicketStatus, createTicketStatus } = useSelector((state) => state.ticketReducer);
+  console.log(roomTicket);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   const [modalVisible3, setModalVisible3] = useState(false);
+  const [modalVisible4, setModalVisible4] = useState(false);
+  const [modalVisible5, setModalVisible5] = useState(false);
+
+  const [timeRange, setTimeRange] = useState([]);
+  const [timeRange2, setTimeRange2] = useState([]);
 
   const [location, setLocation] = useState("");
 
   const [furnitureStatus, setFurnitureStatus] = useState([false, false, false, false, false, false, false, false, false, false]);
+
+  const [id, setId] = useState(""); // id to update ticket
+  const [userId, setUserId] = useState(""); // user id to update ticket
 
   const rid = props.match.params.rid;
 
@@ -33,6 +54,7 @@ export default function AdminRoomDetailPage(props) {
     dispatch(getRoomDetail(rid));
     dispatch(getLocationAPI());
     dispatch(getReview(rid));
+    dispatch(getTicketByRoom(rid));
 
     return () => {
       dispatch({ type: CLEAR_ROOM_DETAIL });
@@ -82,6 +104,50 @@ export default function AdminRoomDetailPage(props) {
       });
     }
   }, [deleteReviewStatus]);
+
+  useEffect(() => {
+    if (deleteTicketStatus === "success") {
+      message.success("Xoá thành công");
+      dispatch({
+        type: DELETE_TICKET_END,
+      });
+    } else if (deleteTicketStatus === "fail") {
+      message.error("Xoá không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: DELETE_TICKET_END,
+      });
+    }
+  }, [deleteTicketStatus]);
+
+  useEffect(() => {
+    if (updateTicketStatus === "success") {
+      message.success("Cập nhật thành công");
+      dispatch({
+        type: UPDATE_TICKET_END,
+      });
+      dispatch(getTicketByRoom(rid));
+    } else if (updateTicketStatus === "fail") {
+      message.error("Cập nhật không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: UPDATE_TICKET_END,
+      });
+    }
+  }, [updateTicketStatus]);
+
+  useEffect(() => {
+    if (createTicketStatus === "success") {
+      message.success("Tạo thành công");
+      dispatch({
+        type: CREATE_TICKET_END,
+      });
+      dispatch(getTicketByRoom(rid));
+    } else if (createTicketStatus === "fail") {
+      message.error("Tạo không thành công. Vui lòng thử lại sau");
+      dispatch({
+        type: CREATE_TICKET_END,
+      });
+    }
+  }, [createTicketStatus]);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -210,6 +276,86 @@ export default function AdminRoomDetailPage(props) {
     });
   };
 
+  const confirmToDeleteTicket = (id) => {
+    Modal.confirm({
+      title: "Xoá ticket",
+      icon: <QuestionCircleOutlined />,
+      content: `Bạn có muốn xoá vé này không?`,
+      okText: "Xoá",
+      cancelText: "Cancel",
+      onOk() {
+        dispatch(deleteTicket(id));
+      },
+    });
+  };
+
+  const showModalToEditTicket = (record) => {
+    setModalVisible4(true);
+    const array = [moment(record.checkIn), moment(record.checkOut)];
+    setTimeRange(array);
+    setId(record._id);
+    setUserId(record.userId._id);
+  };
+
+  const editTicket = () => {
+    setModalVisible4(false);
+    const startTime = timeRange[0].seconds(0).milliseconds(0).toISOString();
+    const endTime = timeRange[1].seconds(0).milliseconds(0).toISOString();
+    dispatch(
+      updateTicket(id, {
+        checkIn: startTime,
+        checkOut: endTime,
+        userId,
+        roomId: rid,
+      })
+    );
+  };
+
+  const showModalToCreateTicket = () => {
+    setModalVisible5(true);
+  };
+
+  const createTicket = () => {
+    setModalVisible5(false);
+    const startTime = timeRange2[0].seconds(0).milliseconds(0).toISOString();
+    const endTime = timeRange2[1].seconds(0).milliseconds(0).toISOString();
+    const userId = document.getElementById("input-user-id").value;
+    dispatch(createTicketAPI(startTime, endTime, userId, rid));
+  };
+
+  const tableColumns = [
+    {
+      title: "Tên user",
+      render: (_, record) => {
+        return record.userId?.name || "Unknown";
+      },
+    },
+    {
+      title: "Check in",
+      render: (_, record) => {
+        return record.checkIn || "Unknown";
+      },
+    },
+    {
+      title: "Check out",
+      render: (_, record) => {
+        return record.checkOut || "Unknown";
+      },
+    },
+    {
+      title: "",
+      key: "action",
+      render: (_, record) => {
+        return (
+          <>
+            <EditOutlined style={{ cursor: "pointer", marginRight: 10 }} onClick={() => showModalToEditTicket(record)} />
+            <DeleteOutlined style={{ cursor: "pointer" }} onClick={() => confirmToDeleteTicket(record._id)} />
+          </>
+        );
+      },
+    },
+  ];
+
   // Nếu chưa đăng nhập hoặc đã đăng nhập nhưng không phải tài khoản admin --> redirect
   if (!localStorage.getItem(USER_LOGIN) || !localStorage.getItem(ACCESS_TOKEN) || !user.email) {
     return <Redirect to="/admin" />;
@@ -278,6 +424,14 @@ export default function AdminRoomDetailPage(props) {
                     })}
                   </Descriptions.Item>
                 </Descriptions>
+                <div className="ticket-list" style={{ marginTop: 30 }}>
+                  <h3 style={{ fontWeight: "bold" }}>Lịch sử đặt vé</h3>
+                  <Button type="primary" style={{ marginTop: 0, marginBottom: 30 }} onClick={() => showModalToCreateTicket()}>
+                    <i className="fa-solid fa-circle-plus" style={{ marginRight: 4 }}></i>
+                    Tạo vé
+                  </Button>
+                  <Table columns={tableColumns} dataSource={roomTicket} bordered rowKey={(record) => record._id} />
+                </div>
               </div>
             </div>
           </div>
@@ -357,6 +511,20 @@ export default function AdminRoomDetailPage(props) {
           <Modal title="Chỉnh sửa đánh giá" centered visible={modalVisible3} okText="OK" onOk={formik2.handleSubmit} onCancel={() => setModalVisible3(false)}>
             <div className="updateReview-content">
               <Input value={formik2.values.content} onChange={formik2.handleChange} name="content" allowClear />
+            </div>
+          </Modal>
+          <Modal title="Cập nhật thông tin vé" visible={modalVisible4} okText="OK" onOk={() => editTicket()} onCancel={() => setModalVisible4(false)}>
+            <div className="booking-time">
+              <RangePicker value={timeRange} showTime format="DD/MM/YYYY HH:mm" style={{ width: "100%" }} onChange={(v) => setTimeRange(v)} />
+            </div>
+          </Modal>
+          <Modal title="Tạo vé" visible={modalVisible5} okText="OK" onOk={() => createTicket()} onCancel={() => setModalVisible5(false)}>
+            <div className="booking-time">
+              <RangePicker showTime format="DD/MM/YYYY HH:mm" style={{ width: "100%" }} onChange={(v) => setTimeRange2(v)} />
+            </div>
+            <div className="booking-roomId">
+              <label>ID của user</label>
+              <Input className="input-id" name="id" allowClear id="input-user-id" />
             </div>
           </Modal>
         </>

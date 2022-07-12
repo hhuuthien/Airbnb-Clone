@@ -278,7 +278,10 @@ export default function AdminUserDetailPage(props) {
                 </Descriptions>
                 <div className="ticket-list" style={{ marginTop: 30 }}>
                   <h3 style={{ fontWeight: "bold" }}>Lịch sử đặt vé</h3>
-                  <button onClick={() => showModalToCreateTicket()}>Tạo vé</button>
+                  <Button type="primary" style={{ marginTop: 0, marginBottom: 30 }} onClick={() => showModalToCreateTicket()}>
+                    <i className="fa-solid fa-circle-plus" style={{ marginRight: 4 }}></i>
+                    Tạo vé
+                  </Button>
                   <Table columns={tableColumns} dataSource={userTicket} bordered rowKey={(record) => record._id} />
                 </div>
               </div>

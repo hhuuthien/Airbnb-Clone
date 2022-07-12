@@ -6,6 +6,7 @@ import {
   CREATE_TICKET_SUCCESS,
   DELETE_TICKET_FAIL,
   DELETE_TICKET_SUCCESS,
+  GET_TICKET_BY_ROOM,
   GET_TICKET_BY_USER,
   GET_TICKET_BY_USER_IN_ROOM,
   UPDATE_TICKET_FAIL,
@@ -78,6 +79,20 @@ export const getTicketByUser = (userId) => {
   };
 };
 
+export const getTicketByRoom = (roomId) => {
+  return async (dispatch) => {
+    try {
+      let result = await http.get("/api/tickets/by-room?roomId=" + roomId);
+      dispatch({
+        type: GET_TICKET_BY_ROOM,
+        data: result.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const deleteTicket = (id) => {
   return async (dispatch) => {
     try {
@@ -99,13 +114,11 @@ export const updateTicket = (id, info) => {
   return async (dispatch) => {
     try {
       let result = await http.put("/api/tickets/" + id, info);
-      console.log(result.data);
       dispatch({
         type: UPDATE_TICKET_SUCCESS,
         data: result.data,
       });
     } catch (error) {
-      console.log(error);
       dispatch({
         type: UPDATE_TICKET_FAIL,
       });
