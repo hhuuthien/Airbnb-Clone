@@ -3,6 +3,7 @@ import { Avatar, Breadcrumb, Button, Comment, DatePicker, Image, Input, message,
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Room from "../components/Room";
 import { createReview, getReview } from "../redux/actions/reviewAction";
 import { getRoomDetail } from "../redux/actions/roomAction";
 import { bookRoom, getTicketByUserInRoom } from "../redux/actions/ticketAction";
@@ -13,7 +14,7 @@ const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 export default function RoomDetailPage(props) {
-  const { roomDetail } = useSelector((root) => root.roomReducer);
+  const { roomDetail, roomList } = useSelector((root) => root.roomReducer);
   const { reviewList, createReviewStatus } = useSelector((root) => root.reviewReducer);
   const { bookingStatus, userTicketInThisRoom } = useSelector((root) => root.ticketReducer);
   const { user } = useSelector((root) => root.accountReducer);
@@ -38,7 +39,7 @@ export default function RoomDetailPage(props) {
         type: CLEAR_TICKET_BY_USER,
       });
     };
-  }, []);
+  }, [props.match.params]);
 
   useEffect(() => {
     if (createReviewStatus === "success") {
@@ -258,6 +259,33 @@ export default function RoomDetailPage(props) {
     setModalVisible2(false);
   };
 
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    return array;
+  };
+
+  const renderSuggestionRoom = () => {
+    if (roomList.length === 0) return <></>;
+
+    return (
+      <div className="room-suggestion" style={{ marginTop: 30 }}>
+        <h3 style={{ fontWeight: "bold" }}>Các phòng khác</h3>
+        <div className="room-list">
+          {shuffleArray(roomList)
+            .slice(0, 4)
+            .map((item, index) => {
+              return <Room room={item} key={index} history={props.history} />;
+            })}
+        </div>
+      </div>
+    );
+  };
+
   if (!roomDetail.name) return <></>;
   return (
     <>
@@ -288,6 +316,7 @@ export default function RoomDetailPage(props) {
             <h3 style={{ fontWeight: "bold", marginTop: 25 }}>Đánh giá</h3>
             {renderReviewArea()}
             {renderReview()}
+            {renderSuggestionRoom()}
           </div>
         </div>
       </div>
